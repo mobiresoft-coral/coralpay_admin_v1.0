@@ -41,7 +41,7 @@ export default function UsersPage() {
   }, [users, filters, searchQuery]);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <h2 className="text-2xl font-bold">Users</h2>
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
@@ -59,7 +59,7 @@ export default function UsersPage() {
         </div>
         <Button
           onClick={() => setInviteModalOpen(true)}
-          className="bg-purple-800 text-white hover:bg-purple-900"
+          className="bg-primary text-white "
         >
           Invite User
         </Button>
