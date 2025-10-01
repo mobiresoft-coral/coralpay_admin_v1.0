@@ -41,13 +41,6 @@ const LoginPage = () => {
 
     if (data) {
       const { accessToken, refreshToken, expiresIn } = data?.data.data || {};
-      // const {
-      //   balance,
-      //   firstName,
-      //   lastName,
-      //   businessEmailAddress,
-      //   businessPhoneNumber,
-      // } = data?.data.data?.UserBusinessDetail || {};
       dispatch(
         setUser({
           isAuthenticated: Boolean(accessToken),
@@ -136,7 +129,7 @@ const LoginPage = () => {
           <div className="flex items-center justify-end">
             <Link
               href="/forgot-password"
-              className="text-base text-primary justify-end
+              className="text-base text-primary justify-end font-semibold
               "
             >
               Forgot Password?

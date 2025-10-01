@@ -11,21 +11,19 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { Check, X } from "lucide-react";
 
-// ---------------- Types ----------------
 export type Availability = "Available" | "Not Available";
 export type RequestStatus = "Pending" | "Approved" | "Declined";
 
 export interface ShortCodeRequest {
-  id: string; // "SCO-12346"
-  ussd: string; // "*312*2#"
+  id: string;
+  ussd: string;
   shortCodeType: "Dedicated" | "Shared";
   availability: Availability;
   status: RequestStatus;
-  createdAt: string; // ISO date string
+  createdAt: string;
   editable?: boolean;
 }
 
-// ---------------- UI helpers ----------------
 export const availabilityBadge = (av: Availability) => {
   const base =
     "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium";
@@ -54,48 +52,46 @@ export const statusBadge = (st: RequestStatus) => {
   );
 };
 
-// ---------------- Columns factory ----------------
-// Pass an onAction(row, "accept" | "reject") handler from the page.
 export function makeColumns(
   onAction: (row: ShortCodeRequest, action: "accept" | "reject") => void
 ): ColumnDef<ShortCodeRequest>[] {
   return [
     {
-      header: () => <span className="text-gray-600">Short Code ID</span>,
+      header: () => <span className="">Short Code ID</span>,
       accessorKey: "id",
       cell: ({ getValue }) => (
         <span className="text-gray-900">{getValue<string>()}</span>
       ),
     },
     {
-      header: () => <span className="text-gray-600">USSD Short Codes</span>,
+      header: () => <span className="">USSD Short Codes</span>,
       accessorKey: "ussd",
       cell: ({ getValue }) => (
         <span className="text-gray-900">{getValue<string>()}</span>
       ),
     },
     {
-      header: () => <span className="text-gray-600">Short Code Type</span>,
+      header: () => <span className="">Short Code Type</span>,
       accessorKey: "shortCodeType",
       cell: ({ getValue }) => (
         <span className="text-gray-900">{getValue<string>()}</span>
       ),
     },
     {
-      header: () => <span className="text-gray-600">Availability</span>,
+      header: () => <span className="">Availability</span>,
       accessorKey: "availability",
       cell: ({ getValue }) => availabilityBadge(getValue<Availability>()),
       enableSorting: false,
     },
     {
-      header: () => <span className="text-gray-600">Status</span>,
+      header: () => <span className="">Status</span>,
       accessorKey: "status",
       cell: ({ getValue }) => statusBadge(getValue<RequestStatus>()),
       enableSorting: false,
     },
     {
       id: "action",
-      header: () => <span className="text-gray-600">Action</span>,
+      header: () => <span className="">Action</span>,
       enableSorting: false,
       cell: ({ row }) => {
         const r = row.original;
@@ -117,7 +113,7 @@ export function makeColumns(
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="unstyled" aria-label={`Actions for ${r.id}`}>
-                <PenSquareIcon className="size-5 text-text-primary" />
+                <PenSquareIcon className="size-5 text-[#00328B]" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
