@@ -12,7 +12,7 @@ import {
 } from "@xyflow/react"
 import type { EdgeData, NodeData, NodeType, Plugin, SimulatorConfig, ToolType } from "@/types"
 
-import { getId, mapPlugin } from "@/lib/utils"
+import { getId } from "@/lib/utils"
 import { debounce } from "@/lib/debounce"
 import { applyServiceChanges } from "@/api/menu"
 import {
@@ -159,7 +159,11 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 					: node
 			),
 		}))
-		get().addChange({ changeType: MenuServiceChangeType.PrePluginAdd, nodeId, plugin })
+		get().addChange({
+			changeType: MenuServiceChangeType.PrePluginAdd,
+			nodeId,
+			plugin: plugin as any,
+		})
 	},
 	updatePrePlugin: (nodeId: string, pluginId: string, plugin: Partial<Plugin>) => {
 		set((state: any) => ({
@@ -181,7 +185,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			changeType: MenuServiceChangeType.PrePluginChange,
 			nodeId,
 			pluginId,
-			plugin: mapPlugin(plugin),
+			plugin: plugin as any,
 		})
 	},
 
@@ -235,7 +239,11 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 					: node
 			),
 		}))
-		get().addChange({ changeType: MenuServiceChangeType.PostPluginAdd, nodeId, plugin })
+		get().addChange({
+			changeType: MenuServiceChangeType.PostPluginAdd,
+			nodeId,
+			plugin: plugin as any,
+		})
 	},
 
 	updatePostPlugin: (nodeId: string, pluginId: string, plugin: Partial<Plugin>) => {
@@ -258,7 +266,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			changeType: MenuServiceChangeType.PostPluginChange,
 			nodeId,
 			pluginId,
-			plugin,
+			plugin: plugin as any,
 		})
 	},
 
