@@ -1,5 +1,4 @@
 import { ReactFlowProvider } from "@xyflow/react"
-
 import { menuBuilderStore } from "@/store/menu-builder-store"
 import { MenuBuilderStoreContext } from "@/contexts/menu-builder-store-context"
 import { useEffect } from "react"
@@ -24,28 +23,22 @@ function MenuBuilderProviderInner({
 	const setNodes = store((s) => s.setNodes)
 	const setEdges = store((s) => s.setEdges)
 	const setMerchantAndService = store((s) => s.setMerchantAndService)
-	const initializeSimulatorFromUrl = store((s) => s.initializeSimulatorFromUrl)
 
 	const nodes = store((s) => s.nodes)
 
-	// Initialize simulator state from URL params on mount
-	// useEffect(() => {
-	// 	initializeSimulatorFromUrl()
-	// }, [initializeSimulatorFromUrl])
+	const { data: service, isLoading } = useFetchEntireService(merchantId, serviceId)
 
-	// const { data: service, isLoading } = useFetchEntireService(merchantId, serviceId)
+	useEffect(() => {
+		setMerchantAndService(merchantId, serviceId)
+	}, [merchantId, serviceId, setMerchantAndService])
 
-	// useEffect(() => {
-	// 	setMerchantAndService(merchantId, serviceId)
-	// }, [merchantId, serviceId, setMerchantAndService])
-
-	// useEffect(() => {
-	// 	if (service?.data?.data) {
-	// 		console.log("Service fetched:", service.data.data)
-	// 		const { nodes } = transformServiceToNodesAndEdges(service.data.data)
-	// 		setNodes(nodes)
-	// 	}
-	// }, [service, setNodes])
+	useEffect(() => {
+		if (service?.data?.data) {
+			console.log("Service fetched:", service.data.data)
+			const { nodes } = transformServiceToNodesAndEdges(service.data.data)
+			setNodes(nodes)
+		}
+	}, [service, setNodes])
 
 	// todo: we can optimize this further by only updating edges when a router plugin or directRoute is added/removed/updated
 	useEffect(() => {

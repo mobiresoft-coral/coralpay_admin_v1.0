@@ -59,7 +59,7 @@ function RouteItem({ route, updateRoute, addEdge, deleteEdge, ...props }: RouteI
 				}}
 				type="source"
 				position={Position.Right}
-				style={{ right: -20, ...HANDLE_DEFAULT_STYLES }}
+				style={{ right: -26, ...HANDLE_DEFAULT_STYLES }}
 				id={`${route.id}`}
 			/>
 		</div>
