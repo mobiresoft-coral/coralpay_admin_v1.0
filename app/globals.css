@@ -298,3 +298,25 @@ input[type="number"] {
 .react-flow__attribution {
   display: none;
 }
+
+
+.simple-keyboard .hg-button.hg-functionBtn.hg-button-space {
+	min-width: 150px;
+	max-width: none;
+}
+
+.simple-keyboard .hg-button.hg-functionBtn.hg-button-ent {
+	max-width: 80px;
+}
+
+.simple-keyboard .hg-button.hg-functionBtn.hg-button-alt {
+	@apply rounded-bl-[6rem];
+}
+
+.simple-keyboard .hg-button.hg-functionBtn.hg-button-default {
+	@apply rounded-bl-[6rem];
+}
+
+.simple-keyboard .hg-button.hg-functionBtn.hg-button-downkeyboard {
+	@apply rounded-br-[6rem];
+}

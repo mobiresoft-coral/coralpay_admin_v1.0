@@ -72,35 +72,23 @@ async function interact(input: string, start: boolean = false) {
 	}
 }
 
-function Notch() {
-	return (
-		<div className="absolute top-3 left-1/2 -translate-x-1/2 w-30 h-7 bg-black rounded-3xl"></div>
-	)
-}
-
-function BottomNavBar() {
-	return (
-		<div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-35 h-1.5 bg-black rounded-full"></div>
-	)
-}
-
 export function Simulator({ config }: SimulatorProps) {
 	console.log(config)
 
-	// 	const screenText = `\
-	// Select a menu option
+	const screenText = `\
+	Select a menu option
 
-	// 1) Balances
-	// 2) Buy
-	// 3) Buy Data
-	// 4) Insurance
-	// 5) Just 4 You
-	// 6) Play/Shake Every Day
-	// 7) Promotions
-	// 8) Airtime Transfer
-	// 9) Services
-	// 10) Fun and Rewards
-	// `
+	1) Balances
+	2) Buy
+	3) Buy Data
+	4) Insurance
+	5) Just 4 You
+	6) Play/Shake Every Day
+	7) Promotions
+	8) Airtime Transfer
+	9) Services
+	10) Fun and Rewards
+	`
 	const [isLoading, setIsLoading] = useState(false)
 
 	const [displayContent, setDisplayContent] = useState<string | null>(null)
@@ -112,9 +100,9 @@ export function Simulator({ config }: SimulatorProps) {
 		setDisplayContent(result.content)
 	}
 
-	useEffect(() => {
-		handleInteract("*302#", true)
-	}, [])
+	// useEffect(() => {
+	// 	handleInteract("*302#", true)
+	// }, [])
 
 	return (
 		<div className="flex items-center justify-center h-full max-w-full p-4 relative flex-1">
@@ -126,13 +114,14 @@ export function Simulator({ config }: SimulatorProps) {
 					objectFit="contain"
 					className="absolute top-0 left-0 w-full h-full pointer-events-none"
 				/>
-				<div className="bg-[rgb(89,89,89)] h-full flex flex-col rounded-[15%] shadow-3xl">
+				<div className="bg-[rgb(89,89,89)] h-full flex flex-col rounded-[15%] shadow-3xl p-3">
 					<div className="flex-1 grid place-items-center text-white">
-						{isLoading || !displayContent ? (
+						{/* {isLoading || !displayContent ? (
 							<Loader2 className="animate-spin h-8 w-8 text-muted/80" />
 						) : (
 							<TextRenderer text={displayContent} />
-						)}
+						)} */}
+						<TextRenderer text={screenText} />
 					</div>
 					{!isLoading && (
 						<div className="simple-keyboard">
