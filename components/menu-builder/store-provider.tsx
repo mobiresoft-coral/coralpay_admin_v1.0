@@ -34,7 +34,6 @@ function MenuBuilderProviderInner({
 
 	useEffect(() => {
 		if (service?.data?.data) {
-			console.log("Service fetched:", service.data.data)
 			const { nodes } = transformServiceToNodesAndEdges(service.data.data)
 			setNodes(nodes)
 		}
