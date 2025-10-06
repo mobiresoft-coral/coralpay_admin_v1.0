@@ -12,7 +12,7 @@ import {
 } from "@xyflow/react"
 import type { EdgeData, NodeData, NodeType, Plugin, SimulatorConfig, ToolType } from "@/types"
 
-import { getId } from "@/lib/utils"
+import { getId, mapPlugin } from "@/lib/utils"
 import { debounce } from "@/lib/debounce"
 import { applyServiceChanges } from "@/api/menu"
 import {
@@ -181,7 +181,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			changeType: MenuServiceChangeType.PrePluginChange,
 			nodeId,
 			pluginId,
-			plugin,
+			plugin: mapPlugin(plugin),
 		})
 	},
 

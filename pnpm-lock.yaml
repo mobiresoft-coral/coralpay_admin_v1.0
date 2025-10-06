@@ -21,7 +21,7 @@ importers:
         specifier: ^5.1.1
         version: 5.1.1(react-hook-form@7.60.0(react@19.1.0))
       '@mobiresoft-coral/ussd-shared-core':
-        specifier: ^1.0.16
+        specifier: ^1.0.21
         version: 1.0.21
       '@radix-ui/react-accordion':
         specifier: ^1.2.11
