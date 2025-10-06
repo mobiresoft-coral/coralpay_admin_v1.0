@@ -293,3 +293,8 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+
+
+.react-flow__attribution {
+  display: none;
+}

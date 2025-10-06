@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const pathname = usePathname();
   const sidebar = useRef<HTMLElement>(null);
 
-  const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(true);
+  const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [openKey, setOpenKey] = useState<string | null>(null);

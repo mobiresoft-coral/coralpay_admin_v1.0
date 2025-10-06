@@ -2,6 +2,7 @@ import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Simulator } from "@/components/simulator/simulator"
 import { useMenuBuilderStore } from "@/hooks/use-menu-builder-store"
+import { QuickAction } from "../menu-builder/quick-action"
 
 export function EmulatorPanel() {
 	const store = useMenuBuilderStore()
@@ -13,19 +14,11 @@ export function EmulatorPanel() {
 	}
 
 	return (
-		<div className="w-[26rem] border flex flex-col shadow-md">
-			<div className="flex shrink-0 items-center justify-between p-2 border-b">
-				<span className="text-lg font-semibold ml-0.5">Simulator</span>
-				<Button
-					onClick={closeEmulator}
-					variant="ghost"
-					size="icon"
-					className="h-auto w-auto p-1 cursor-pointer"
-				>
-					<X className="w-4 h-4" />
-				</Button>
+		<div className="absolute top-0 right-0 h-full w-full bg-[#e5e0e8] flex items-center justify-center">
+			<div className="absolute top-0 right-0 p-4">
+				<QuickAction isSimulating={true} />
 			</div>
-			<div className="flex-1">
+			<div className="w-[26rem]">
 				<Simulator config={simulatorConfig} />
 			</div>
 		</div>
