@@ -340,7 +340,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 				save()
 			}
 		}
-	}, 1500),
+	}, 500),
 	closeSimulator: () => {
 		set({ simulatorConfig: { open: false } })
 		// Clear URL params

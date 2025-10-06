@@ -1,7 +1,7 @@
 import { CircleAlert, Copy, Play, Trash2 } from "lucide-react"
 import { Button } from "./ui/button"
 import { useNodeAction } from "@/hooks/use-node-action"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 import {
 	useInternalNode,
