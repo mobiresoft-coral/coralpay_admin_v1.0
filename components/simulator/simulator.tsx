@@ -126,7 +126,7 @@ export function Simulator({ config }: SimulatorProps) {
 					objectFit="contain"
 					className="absolute top-0 left-0 w-full h-full pointer-events-none"
 				/>
-				<div className="bg-[rgb(89,89,89)] h-full flex flex-col rounded-[4.3rem] shadow-3xl">
+				<div className="bg-[rgb(89,89,89)] h-full flex flex-col rounded-[15%] shadow-3xl">
 					<div className="flex-1 grid place-items-center text-white">
 						{isLoading || !displayContent ? (
 							<Loader2 className="animate-spin h-8 w-8 text-muted/80" />

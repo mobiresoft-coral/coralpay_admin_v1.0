@@ -64,6 +64,7 @@ type MenuBuilderActions = {
 	setReactFlowInstance: (instance: ReactFlowInstance<Node<NodeData>, Edge<EdgeData>> | null) => void
 	closeSimulator: () => void
 	openSimulator: (options: Partial<SimulatorConfig>) => void
+	initializeSimulatorFromUrl: () => void
 	setNodes: (nodes: Node<NodeData>[]) => void
 	setEdges: (edges: Edge<EdgeData>[]) => void
 	onNodesChange: (changes: NodeChange<Node<NodeData>>[]) => void
@@ -327,9 +328,45 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			}
 		}
 	}, 1500),
-	closeSimulator: () => set({ simulatorConfig: { open: false } }),
+	closeSimulator: () => {
+		set({ simulatorConfig: { open: false } })
+		// Clear URL params
+		// if (typeof window !== "undefined") {
+		// 	const url = new URL(window.location.href)
+		// 	url.searchParams.delete("simulatorOpen")
+		// 	url.searchParams.delete("simulatorStartNodeId")
+		// 	window.history.pushState({}, "", url)
+		// }
+	},
 	openSimulator: (options) => {
 		set({ simulatorConfig: { open: true, ...options } })
+		// Update URL params
+		// if (typeof window !== "undefined") {
+		// 	const url = new URL(window.location.href)
+		// 	url.searchParams.set("simulatorOpen", "true")
+		// 	if (options.startNodeId) {
+		// 		url.searchParams.set("simulatorStartNodeId", options.startNodeId)
+		// 	} else {
+		// 		url.searchParams.delete("simulatorStartNodeId")
+		// 	}
+		// 	window.history.pushState({}, "", url)
+		// }
+	},
+	initializeSimulatorFromUrl: () => {
+		if (typeof window !== "undefined") {
+			const url = new URL(window.location.href)
+			const simulatorOpen = url.searchParams.get("simulatorOpen") === "true"
+			const simulatorStartNodeId = url.searchParams.get("simulatorStartNodeId") || undefined
+
+			if (simulatorOpen) {
+				set({
+					simulatorConfig: {
+						open: true,
+						startNodeId: simulatorStartNodeId,
+					},
+				})
+			}
+		}
 	},
 	setReactFlowInstance: (instance) => set({ reactFlowInstance: instance }),
 	setNodes: (nodes) => {

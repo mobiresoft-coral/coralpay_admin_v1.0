@@ -24,8 +24,14 @@ function MenuBuilderProviderInner({
 	const setNodes = store((s) => s.setNodes)
 	const setEdges = store((s) => s.setEdges)
 	const setMerchantAndService = store((s) => s.setMerchantAndService)
+	const initializeSimulatorFromUrl = store((s) => s.initializeSimulatorFromUrl)
 
 	const nodes = store((s) => s.nodes)
+
+	// Initialize simulator state from URL params on mount
+	// useEffect(() => {
+	// 	initializeSimulatorFromUrl()
+	// }, [initializeSimulatorFromUrl])
 
 	// const { data: service, isLoading } = useFetchEntireService(merchantId, serviceId)
 
