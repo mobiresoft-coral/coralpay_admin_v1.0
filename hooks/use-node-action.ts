@@ -6,6 +6,7 @@ import { useMenuBuilderStore } from "@/hooks/use-menu-builder-store"
 import { APP_HANDLE } from "@/constants/common"
 import { toast } from "sonner"
 import { useNodeId } from "@xyflow/react"
+import { MenuServiceChangeType } from "@mobiresoft-coral/ussd-shared-core"
 
 export function useNodeAction() {
 	const id = useNodeId()!
@@ -17,6 +18,20 @@ export function useNodeAction() {
 	const openEmulator = store((state) => state.openSimulator)
 	const addPrePlugin = store((state) => state.addPrePlugin)
 	const addPostPlugin = store((state) => state.addPostPlugin)
+	const updatePrePlugin = store((s) => s.updatePrePlugin)
+	const updatePostPlugin = store((s) => s.updatePostPlugin)
+	const updateNodeMetaInner = store((s) => s.updateNodeMeta)
+
+	const updateNodeMeta = useCallback(
+		(
+			...args: Parameters<typeof updateNodeMetaInner> extends [infer _, ...infer Rest]
+				? [...Rest]
+				: never
+		) => {
+			updateNodeMetaInner(id, ...args)
+		},
+		[id, updateNode]
+	)
 
 	const removePrePlugin = useCallback(
 		(pluginId: string) => {
@@ -100,15 +115,6 @@ export function useNodeAction() {
 		[id, addPlugin]
 	)
 
-	const updateRenderTemplate = useCallback(
-		(renderTemplate: string) => {
-			updateNode(id, {
-				renderTemplate,
-			})
-		},
-		[id, updateNode]
-	)
-
 	const updateNodeData = useCallback(
 		(...args: [Parameters<typeof updateNode>[1]]) => {
 			updateNode(id, ...args)
@@ -118,16 +124,13 @@ export function useNodeAction() {
 
 	const updatePlugin = useCallback(
 		(pluginId: string, plugin: Plugin, isPostPlugin: boolean = true) => {
-			updateNode(id, (node) => {
-				const plugins = isPostPlugin ? node.data.postPlugins : node.data.prePlugins
-				const updatedPlugins = plugins.map((p) => (p.id === pluginId ? plugin : p))
-				return {
-					...node.data,
-					[isPostPlugin ? "postPlugins" : "prePlugins"]: updatedPlugins,
-				}
-			})
+			if (isPostPlugin) {
+				updatePostPlugin(id, pluginId, plugin)
+			} else {
+				updatePrePlugin(id, pluginId, plugin)
+			}
 		},
-		[id, updateNode]
+		[id, updatePrePlugin, updatePostPlugin]
 	)
 
 	const onCopyAction = useCallback(async () => {
@@ -177,7 +180,6 @@ export function useNodeAction() {
 		startEmulation,
 		onDropPrePlugin,
 		onDropPostPlugin,
-		updateRenderTemplate,
 		updateNodeData,
 		updatePlugin,
 		removeNode,
@@ -187,5 +189,6 @@ export function useNodeAction() {
 		onIdCopyAction,
 		reorderPlugins,
 		toggleDragging,
+		updateNodeMeta,
 	}
 }

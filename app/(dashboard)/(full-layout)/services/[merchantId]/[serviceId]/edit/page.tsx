@@ -9,6 +9,7 @@ import { StoreChangeObserver } from "@/components/menu-builder/store-change-obse
 import ErrorBoundary from "@/components/common/error-boundary"
 import { QuickAction } from "@/components/menu-builder/quick-action"
 import { SceneControls } from "@/components/menu-builder/scene-control"
+import { SaveStatus } from "@/components/menu-builder/save-status"
 
 const EditServicePage = () => {
 	return (
@@ -22,7 +23,8 @@ const EditServicePage = () => {
 					<div className="flex-1">
 						<MenuBuilderWorkspace />
 					</div>
-					<div className="absolute top-0 right-0 p-4">
+					<div className="absolute top-0 right-0 p-4 flex items-center gap-4">
+						<SaveStatus />
 						<QuickAction />
 					</div>
 					<div className="absolute bottom-0 right-4 p-4">

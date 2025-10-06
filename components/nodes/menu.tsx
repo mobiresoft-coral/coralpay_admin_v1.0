@@ -5,11 +5,7 @@ import { useNodeAction } from "@/hooks/use-node-action"
 import { EditableTitle } from "@/components/common/editable-title"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { memo, useCallback } from "react"
-import {
-	MenuComponentBody,
-	MenuComponentIcon,
-	MenuComponentOverview,
-} from "@/components/menu/component-overview"
+import { MenuComponentBody, MenuComponentOverview } from "@/components/menu/component-overview"
 import { RenderTemplateSettings } from "@/components/menu/settings/template-settings"
 import { PluginList } from "@/components/menu/plugin-list"
 import { Badge } from "@/components/ui/badge"
@@ -21,21 +17,22 @@ function MenuNodeImpl({ id, data }: NodeProps<Node<NodeData>>) {
 	const {
 		onDropPostPlugin,
 		onDropPrePlugin,
-		updateRenderTemplate,
-		updateNodeData,
 		updatePlugin,
 		removePostPlugin,
 		removePrePlugin,
 		reorderPlugins,
+		updateNodeMeta,
 	} = useNodeAction()
+
+	function updateRenderTemplate(value: string) {
+		updateNodeMeta({ renderTemplate: value })
+	}
 
 	const onTitleSave = useCallback(
 		(value: string) => {
-			updateNodeData({
-				name: value,
-			})
+			updateNodeMeta({ name: value })
 		},
-		[updateNodeData]
+		[updateNodeMeta]
 	)
 
 	const onPrePluginSave = useCallback(

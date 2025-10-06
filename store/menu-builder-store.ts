@@ -92,9 +92,11 @@ type MenuBuilderActions = {
 	updateServiceMeta: (name?: string, envs?: Record<string, any>) => void
 	updateNodeMeta: (
 		nodeId: string,
-		name?: string,
-		renderTemplate?: string,
-		meta?: Record<string, any>
+		meta: {
+			name?: string
+			renderTemplate?: string
+			meta?: Record<string, any>
+		}
 	) => void
 	addPrePlugin: (nodeId: string, plugin: Plugin) => void
 	updatePrePlugin: (nodeId: string, pluginId: string, plugin: Partial<Plugin>) => void
@@ -121,7 +123,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	updateServiceMeta: (name, envs) => {
 		get().addChange({ changeType: MenuServiceChangeType.MetaChange, name, envs })
 	},
-	updateNodeMeta: (nodeId, name, renderTemplate, meta) => {
+	updateNodeMeta: (nodeId, meta) => {
 		set((state) => ({
 			nodes: state.nodes.map((node) =>
 				node.id === nodeId
@@ -129,9 +131,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 							...node,
 							data: {
 								...node.data,
-								name: name || node.data.name,
-								renderTemplate: renderTemplate || node.data.renderTemplate,
-								meta: meta ? { ...node.data.meta, ...meta } : node.data.meta,
+								...meta,
 							},
 					  }
 					: node
@@ -140,9 +140,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 		get().addChange({
 			changeType: MenuServiceChangeType.NodeMetaChange,
 			nodeId,
-			name,
-			renderTemplate,
-			meta,
+			...meta,
 		})
 	},
 	addPrePlugin: (nodeId: string, plugin: Plugin) => {
@@ -262,6 +260,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 					: node
 			),
 		}))
+
 		get().addChange({
 			changeType: MenuServiceChangeType.PostPluginChange,
 			nodeId,
@@ -515,7 +514,7 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 
 	// todo: handle edge removal when removing router plugin
 	removePlugin: (nodeId, pluginId, isPostPlugin = true) => {
-		const { updateNodeData: updateNode } = get()
+		const { updateNodeData: updateNode, addChange } = get()
 
 		updateNode(nodeId, (node) => {
 			const updatedPlugins = isPostPlugin
@@ -526,6 +525,12 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 				[isPostPlugin ? "postPlugins" : "prePlugins"]: updatedPlugins,
 			}
 		})
+
+		if (isPostPlugin) {
+			addChange({ changeType: MenuServiceChangeType.PostPluginRemove, pluginId, nodeId })
+		} else {
+			addChange({ changeType: MenuServiceChangeType.PrePluginRemove, pluginId, nodeId })
+		}
 	},
 
 	removeNode: (nodeId) => {
