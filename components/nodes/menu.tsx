@@ -28,6 +28,7 @@ function MenuNodeImpl({ id, data }: NodeProps<Node<NodeData>>) {
 		updateNodeMeta({ renderTemplate: value })
 	}
 
+	console.log("dd")
 	const onTitleSave = useCallback(
 		(value: string) => {
 			updateNodeMeta({ name: value })

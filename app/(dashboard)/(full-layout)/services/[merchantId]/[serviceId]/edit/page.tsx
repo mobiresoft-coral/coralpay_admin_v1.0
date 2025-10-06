@@ -15,8 +15,8 @@ const EditServicePage = () => {
 	return (
 		<ErrorBoundary>
 			<MenuBuilderStoreProvider
-				merchantId="344cdc8c-a7b0-4fbe-b665-607af6e412ed"
-				serviceId="c887ce9c-cc9b-4a31-bdec-1cc9111fa709"
+				merchantId="a61b057a-e23b-4640-9444-6ac8fdc6d45f"
+				serviceId="c42a3f61-1e1b-4baf-a780-f79181c300a6"
 			>
 				<StoreChangeObserver />
 				<div className="relative h-dvh flex">

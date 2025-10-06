@@ -110,8 +110,8 @@ type MenuBuilderActions = {
 
 export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((set, get) => ({
 	reactFlowInstance: null,
-	nodes: JSON.parse(JSON.stringify(DEFAULT_NODE)),
-	// nodes: [],
+	// nodes: JSON.parse(JSON.stringify(DEFAULT_NODE)),
+	nodes: [],
 	edges: [],
 	nodeTypes: NODE_TYPES,
 	simulatorConfig: {
@@ -124,6 +124,10 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 		get().addChange({ changeType: MenuServiceChangeType.MetaChange, name, envs })
 	},
 	updateNodeMeta: (nodeId, meta) => {
+		const { addChange, nodes } = get()
+
+		const node = nodes.find((n) => n.id === nodeId)
+
 		set((state) => ({
 			nodes: state.nodes.map((node) =>
 				node.id === nodeId
@@ -137,10 +141,12 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 					: node
 			),
 		}))
-		get().addChange({
+
+		addChange({
 			changeType: MenuServiceChangeType.NodeMetaChange,
 			nodeId,
 			...meta,
+			meta: { ...node?.data.meta, ...meta.meta },
 		})
 	},
 	addPrePlugin: (nodeId: string, plugin: Plugin) => {

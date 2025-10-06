@@ -46,9 +46,9 @@ function MenuBuilderProviderInner({
 		setEdges(edges)
 	}, [nodes, setEdges])
 
-	// if (isLoading) {
-	// 	return <LoadingScreen />
-	// }
+	if (isLoading) {
+		return <LoadingScreen />
+	}
 
 	return (
 		<MenuBuilderStoreContext.Provider value={store}>{children}</MenuBuilderStoreContext.Provider>
