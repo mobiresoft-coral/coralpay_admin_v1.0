@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/plain-input"
 import { cn } from "@/lib/utils"
 import { useDebouncer } from "@/hooks/use-debouncer"
 import { DEBOUNCE_TIME } from "@/constants/common"
@@ -46,11 +46,11 @@ export function EditableTitle({ className, value, onSave, ...props }: EditableTi
 					onChange={handleTextChange}
 					onBlur={handleBlur}
 					autoFocus
-					className="!h-full w-full focus-visible:ring-0 focus-visible:shadow-none rounded-none border-0 focus-visible:border-0 px-1  -mt-0.5"
+					className="!text-[1em] !h-full w-full focus-visible:ring-0 focus-visible:shadow-none rounded-none border-0 focus-visible:border-0 px-1  -mt-0.5"
 					{...props}
 				/>
 			) : (
-				<div className="px-1 h-full flex items-center">{text}</div>
+				<div className="px-1 h-full flex items-center truncate">{text}</div>
 			)}
 		</div>
 	)

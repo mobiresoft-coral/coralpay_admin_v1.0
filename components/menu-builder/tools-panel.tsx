@@ -1,7 +1,20 @@
-import { Input } from "../ui/input"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import type { ToolType } from "@/types"
 import { ICON_MAP } from "@/constants/tools"
+import HelpIcon from "@/assets/icons/help.png"
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
+import { EditableTitle } from "@/components/common/editable-title"
+import { ScrollArea } from "@/components//ui/scroll-area"
+import Image from "next/image"
 
 export function ToolSearchBar() {
 	return (
@@ -109,7 +122,7 @@ const TOOL_SECTIONS: ToolSection[] = [
 
 interface ToolProps {
 	tool: Tool
-	className: string
+	className?: string
 }
 
 function Tool({ tool, className }: ToolProps) {
@@ -132,11 +145,11 @@ function Tool({ tool, className }: ToolProps) {
 			draggable
 			key={tool.name}
 			className={cn(
-				"flex items-center px-2 py-1.5 bg-[#A476B214] rounded-lg transition-shadow cursor-pointer select-none border"
+				"flex items-center p-2 px-3 bg-[#A476B214] rounded-lg cursor-pointer select-none"
 			)}
 		>
 			<Icon className={cn("h-4 w-4", className)} />
-			<span className="ml-2 text-sm">{tool.title}</span>
+			<span className="ml-2 text-sm font-bold text-text-tertiary">{tool.title}</span>
 		</div>
 	)
 }
@@ -148,11 +161,53 @@ interface ToolSectionProps {
 function ToolSection({ section }: ToolSectionProps) {
 	return (
 		<div className="p-2">
-			<h3 className="text-sm font-semibold text-gray-700 mb-2">{section.name}</h3>
+			<div className="flex items-center justify-between mb-4">
+				<h3 className="text-sm text-text-primary ml-3 font-bold">{section.name}</h3>
+				<Image src={HelpIcon} alt="Help" className="w-4.5 h-4.5" />
+			</div>
 			<div className="grid grid-cols-2 gap-4">
 				{section.tools.map((tool) => (
-					<Tool key={tool.name} tool={tool} className={section.className} />
+					<Tool key={tool.name} tool={tool} />
 				))}
+			</div>
+		</div>
+	)
+}
+
+function ShortCodeOption() {
+	const availbleShortCodes = ["*123#", "*456#", "*789#", "*111#", "*222#"]
+	return (
+		<div className="p-2">
+			<div className="font-bold text-sm mb-2">Short Code</div>
+			<Select>
+				<SelectTrigger className="w-full font-bold text-base border-none shadow-none bg-lineColor !py-6">
+					<SelectValue placeholder="Select a shortcode" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						<SelectLabel>Short Codes</SelectLabel>
+						{availbleShortCodes.map((code) => (
+							<SelectItem key={code} value={code} className="font-bold">
+								{code}
+							</SelectItem>
+						))}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
+		</div>
+	)
+}
+
+function ServiceNameInput() {
+	return (
+		<div className="p-2">
+			<div className="font-bold text-sm mb-2">Service Name</div>
+			<div className="p-3 bg-lineColor rounded-lg">
+				<EditableTitle
+					className="!text-base font-bold w-full"
+					value="My Service"
+					onSave={() => {}}
+				/>
 			</div>
 		</div>
 	)
@@ -160,12 +215,14 @@ function ToolSection({ section }: ToolSectionProps) {
 
 export function ToolsPanel() {
 	return (
-		<div className="h-full bg-white rounded-lg  w-72 p-2 space-y-2">
-			<div className="p-2 text-3xl font-semibold">Build Service</div>
-
-			{TOOL_SECTIONS.map((section) => (
-				<ToolSection key={section.name} section={section} />
-			))}
-		</div>
+		<ScrollArea className="h-full p-2 space-y-3 w-78 bg-[#fdfdfe] rounded-3xl overflow-hidden">
+			<ServiceNameInput />
+			<ShortCodeOption />
+			<div className="space-y-5 pt-3">
+				{TOOL_SECTIONS.map((section) => (
+					<ToolSection key={section.name} section={section} />
+				))}
+			</div>
+		</ScrollArea>
 	)
 }

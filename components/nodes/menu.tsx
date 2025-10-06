@@ -68,7 +68,7 @@ function MenuNodeImpl({ id, data }: NodeProps<Node<NodeData>>) {
 
 	return (
 		<NodeWrapper>
-			<div className="bg-[#FEFAFF] py-2 rounded-3xl border border-[#4c0463] text-sm flex flex-col gap-y-1.5 w-66">
+			<div className="bg-[#FEFAFF] py-2 rounded-3xl border border-[#4c0463] text-sm flex flex-col gap-y-1.5 w-80">
 				<div className="flex pl-6 pr-2 py-2 pb-3 border-b border-[#4c0463]">
 					<EditableTitle
 						className="flex-1 font-bold text-[#222222] text-sm"

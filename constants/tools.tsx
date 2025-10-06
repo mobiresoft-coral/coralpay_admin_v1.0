@@ -4,6 +4,17 @@ import { StartNode } from "@/components/nodes/start"
 import { EndNode } from "@/components/nodes/end"
 import { MenuNode } from "@/components/nodes/menu"
 
+import TemplateIcon from "@/assets/icons/template.png"
+import RouterIcon from "@/assets/icons/router.png"
+import PaymentIcon from "@/assets/icons/payment.png"
+import ApiCallIcon from "@/assets/icons/api.png"
+import MailIcon from "@/assets/icons/mail.png"
+import PhoneIcon from "@/assets/icons/phone.png"
+import GlobeIcon from "@/assets/icons/web.png"
+import VariableIcon from "@/assets/icons/tree.png"
+import TextIcon from "@/assets/icons/text.png"
+import NumberIcon from "@/assets/icons/number.png"
+
 import {
 	createApiPlugin,
 	createEmailInputPlugin,
@@ -16,20 +27,7 @@ import {
 	createWebsiteInputPlugin,
 } from "@/lib/plugin-utils"
 
-import {
-	CreditCard,
-	Flag,
-	Globe,
-	Hash,
-	Mail,
-	Phone,
-	Play,
-	Route,
-	Text,
-	Type,
-	Variable,
-	Zap,
-} from "lucide-react"
+import { Ban, Play } from "lucide-react"
 import {
 	MarkerType,
 	type Edge,
@@ -38,20 +36,21 @@ import {
 	type NodeProps,
 } from "@xyflow/react"
 import type React from "react"
+import { createImageIcon } from "@/lib/utils"
 
-export const ICON_MAP: Record<ToolType, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-	display_text: Text,
-	plugin_router: Route,
-	plugin_payment: CreditCard,
-	plugin_apicall: Zap,
-	input_text: Type,
-	input_number: Hash,
-	input_email: Mail,
-	input_phone: Phone,
-	input_website: Globe,
-	logic_set_variable: Variable,
+export const ICON_MAP: Record<ToolType, React.ComponentType<any>> = {
+	display_text: createImageIcon(TemplateIcon, "Template"),
+	plugin_router: createImageIcon(RouterIcon, "Router"),
+	plugin_payment: createImageIcon(PaymentIcon, "Payment"),
+	plugin_apicall: createImageIcon(ApiCallIcon, "API Call"),
+	input_text: createImageIcon(TextIcon, "Text"),
+	input_number: createImageIcon(NumberIcon, "Number"),
+	input_email: createImageIcon(MailIcon, "Email"),
+	input_phone: createImageIcon(PhoneIcon, "Phone"),
+	input_website: createImageIcon(GlobeIcon, "Website"),
+	logic_set_variable: createImageIcon(VariableIcon, "Set Variable"),
 	event_start: Play,
-	event_end: Flag,
+	event_end: Ban,
 }
 
 export const PLUGIN_TOOL_TYPES = ["plugin_router", "plugin_payment", "plugin_apicall"] as const

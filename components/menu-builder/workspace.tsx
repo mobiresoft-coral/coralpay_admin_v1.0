@@ -31,9 +31,9 @@ export function MenuBuilderWorkspace() {
 			defaultViewport={defaultViewport}
 			nodeTypes={nodeTypes}
 		>
-			<Controls position="top-right" />
-			<Background className="bg-gray-100" />
-			<MiniMap />
+			{/* <Controls position="bottom-right" orientation="horizontal" /> */}
+			<Background color="#A476B214" size={4}/>
+			{/* <MiniMap /> */}
 		</ReactFlow>
 	)
 }

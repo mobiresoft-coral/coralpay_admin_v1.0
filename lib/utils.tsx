@@ -1,5 +1,6 @@
 import type { KeyValuePair, ToolType } from "@/types"
 import { clsx, type ClassValue } from "clsx"
+import Image, { StaticImageData } from "next/image"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -54,4 +55,10 @@ export const keyValuePairsToObject = (
 
 export async function sleep(duration: number) {
 	return new Promise((resolve) => setTimeout(resolve, duration))
+}
+
+export function createImageIcon(src: StaticImageData, alt: string) {
+	return (props?: React.ComponentProps<any>) => (
+		<Image src={src} alt={alt} {...props} width={300} height={300} />
+	)
 }
