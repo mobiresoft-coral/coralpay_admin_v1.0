@@ -9,7 +9,7 @@ import { Bell } from "lucide-react";
 import React, { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { toast } from "sonner";
-import UsersGroupIcon from "../../../components/svgs/UserGroupIcon";
+import UsersGroupIcon from "@/components/svgs/UserGroupIcon";
 import { makeColumns, ShortCodeRequest } from "./colums";
 import { requestData } from "./data";
 
