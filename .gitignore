@@ -1,6 +1,7 @@
 node_modules/
 .next
 
-Dockerfile
-dockercompose.ymlnode_modules/
+# Dockerfile
+# docker-compose.yml
+
 .next
