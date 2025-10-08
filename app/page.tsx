@@ -21,7 +21,7 @@ export default function Home() {
           Your Self-Service Platform for Rapid USSD Application Development
         </h1>
         <p className="text-[#222222] text-xl font-semibold mt-4 max-w-4xl">
-          Fast, scalable, and secure self-service platform that simplifies USSD
+          Fast, scalable, and secures self-service platform that simplifies USSD
           application development by allowing users to quickly create menus and
           integrate them with their business logic.
         </p>
