@@ -1,46 +1,46 @@
-"use client"
+"use client";
 
-import Sidebar from "@/components/Sidebar"
-import { Toaster } from "@/components/ui/sonner"
-import { Menu } from "lucide-react"
-import { ReactNode, useState } from "react"
+import Sidebar from "@/components/Sidebar";
+import { Toaster } from "@/components/ui/sonner";
+import { Menu } from "lucide-react";
+import { ReactNode, useState } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-	const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
-	//   useSessionCheck();
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  //   useSessionCheck();
 
-	return (
-		<div className="relative w-full flex flex-col overflow-hidden bg-[#FDFDFE] text-text-primary">
-			{/* Simple top bar with hamburger (mobile/tablet only) */}
-			<div className="flex items-center justify-end h-14 px-4 bg-white lg:hidden">
-				<button
-					// ref={triggerRef}
-					onClick={() => setSidebarOpen(true)}
-					className="inline-flex items-center justify-center rounded-md px-3 py-2"
-					aria-label="Open sidebar"
-				>
-					<Menu className="size-7" />
-				</button>
-			</div>
+  return (
+    <div className="relative w-full flex flex-col overflow-hidden bg-[#FDFDFE] text-text-primary">
+      {/* Simple top bar with hamburger (mobile/tablet only) */}
+      <div className="flex items-center justify-end h-14 px-4 bg-white lg:hidden">
+        <button
+          // ref={triggerRef}
+          onClick={() => setSidebarOpen(true)}
+          className="inline-flex items-center justify-center rounded-md px-3 py-2"
+          aria-label="Open sidebar"
+        >
+          <Menu className="size-7" />
+        </button>
+      </div>
 
-			<div className="flex w-full h-screen relative">
-				<Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-				<main className="flex-1 overflow-x-hidden overflow-y-auto">
-					{/* <Header
+      <div className="flex w-full h-screen relative">
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto">
+          {/* <Header
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
             // headerTitle="HalalNest Merchant"
             // sidebar={true}
           /> */}
-					{children}
-					<Toaster position="bottom-right" />
-				</main>
-			</div>
-		</div>
-	)
-}
+          {children}
+          <Toaster position="bottom-right" />
+        </main>
+      </div>
+    </div>
+  );
+};
 
-export default Layout
+export default Layout;
 
 // "use client";
 
