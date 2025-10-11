@@ -14,6 +14,7 @@ import type { ApiCallPlugin } from "@mobiresoft-coral/ussd-shared-core"
 import { getId, keyValuePairsToObject, objectToKeyValuePairs } from "@/lib/utils"
 import { KeyValueSelect } from "@/components/common/key-value-select"
 import { DEBOUNCE_TIME } from "@/constants/common"
+import { SmartInput } from "@/components/smart-input"
 
 interface ApiCallPluginSettingsProps {
 	plugin: ApiCallPlugin
@@ -101,13 +102,20 @@ export function ApiCallPluginSettings({ plugin, onSave }: ApiCallPluginSettingsP
 		[headers, updateHeaders]
 	)
 
+	const handleUrlUpdate = useCallback(
+		(e: ChangeEvent<HTMLInputElement>) => {
+			updateConfig({ url: e.target.value })
+		},
+		[updateConfig]
+	)
+
 	return (
 		<div className="flex flex-col gap-y-4">
 			<div className="flex flex-col gap-y-2">
 				<span className="font-normal">URL:</span>
-				<Input
+				<SmartInput
 					value={config.url || ""}
-					onChange={(e: ChangeEvent<HTMLInputElement>) => updateConfig({ url: e.target.value })}
+					onChange={handleUrlUpdate}
 					placeholder="https://api.example.com/endpoint"
 					className="focus-visible:border-0 focus-visible:ring-2"
 				/>
