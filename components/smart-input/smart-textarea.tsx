@@ -69,8 +69,8 @@ export const SmartTextarea = forwardRef<HTMLTextAreaElement, SmartTextareaProps>
 				// Create a synthetic textarea event from the input event
 				const textareaEvent = {
 					...event,
-					target: { ...event.target, tagName: "TEXTAREA" },
-					currentTarget: { ...event.currentTarget, tagName: "TEXTAREA" },
+					target: event.target as unknown as EventTarget & HTMLTextAreaElement,
+					currentTarget: event.currentTarget as unknown as EventTarget & HTMLTextAreaElement,
 				} as React.ChangeEvent<HTMLTextAreaElement>
 
 				onChange(textareaEvent)
@@ -153,8 +153,8 @@ export const SmartTextarea = forwardRef<HTMLTextAreaElement, SmartTextareaProps>
 								// Convert textarea event to input event for the hook
 								const inputEvent = {
 									...e,
-									target: { ...e.target, tagName: "INPUT" },
-									currentTarget: { ...e.currentTarget, tagName: "INPUT" },
+									target: e.target as unknown as EventTarget & HTMLInputElement,
+									currentTarget: e.currentTarget as unknown as EventTarget & HTMLInputElement,
 								} as React.ChangeEvent<HTMLInputElement>
 
 								smartInput.handleInputChange(inputEvent)
@@ -188,8 +188,6 @@ export const SmartTextarea = forwardRef<HTMLTextAreaElement, SmartTextareaProps>
 							aria-expanded={smartInput.showSuggestions}
 							aria-haspopup="listbox"
 							aria-autocomplete="list"
-							// Additional props
-							{...props}
 						/>
 					</div>
 				</EnvironmentSuggestions>
