@@ -1,7 +1,7 @@
 import { useMenuBuilderStore } from "@/hooks/use-menu-builder-store"
 import { ReactFlow, Background, Controls, MiniMap } from "@xyflow/react"
 
-const defaultViewport = { x: 0, y: 0, zoom: 1.2 }
+const defaultViewport = { x: 0, y: 0, zoom: 0.7 }
 
 export function MenuBuilderWorkspace() {
 	const store = useMenuBuilderStore()
