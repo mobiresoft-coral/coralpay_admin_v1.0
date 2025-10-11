@@ -8,7 +8,6 @@ import { MenuBuilderStoreProvider } from "@/components/menu-builder/store-provid
 import { ToolsPanel } from "@/components/menu-builder/tools-panel";
 import { MenuBuilderWorkspace } from "@/components/menu-builder/workspace";
 import { EmulatorPanel } from "@/components/simulator/panel";
-import { Toaster } from "@/components/ui/sonner";
 import "@xyflow/react/dist/style.css";
 
 const EditServicePage = () => {
@@ -36,7 +35,6 @@ const EditServicePage = () => {
           <EmulatorPanel />
         </div>
       </MenuBuilderStoreProvider>
-      <Toaster position="top-right" />
     </ErrorBoundary>
   );
 };

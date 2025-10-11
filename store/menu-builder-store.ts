@@ -29,6 +29,7 @@ import {
 	MenuServiceChangeType,
 	type MenuServiceChange,
 } from "@mobiresoft-coral/ussd-shared-core"
+import { toast } from "sonner"
 
 const DEFAULT_NODE: Node<NodeData, NodeType>[] = [
 	{
@@ -57,8 +58,11 @@ type MenuBuilderState = {
 	simulatorConfig: SimulatorConfig
 	changes: MenuServiceChange[]
 	isSaving: boolean
+	saveError: string | null
+	retryCount: number
 	merchantId?: string
 	serviceId?: string
+	serviceEnvs: Record<string, string>
 }
 
 type MenuBuilderActions = {
@@ -89,6 +93,8 @@ type MenuBuilderActions = {
 	addChange: (change: MenuServiceChange) => void
 	clearChanges: () => void
 	save: () => void
+	retrySave: () => void
+	clearSaveError: () => void
 	setMerchantAndService: (merchantId: string, serviceId: string) => void
 	updateServiceMeta: (name?: string, envs?: Record<string, any>) => void
 	updateNodeMeta: (
@@ -111,6 +117,9 @@ type MenuBuilderActions = {
 	updatePostPlugin: (nodeId: string, pluginId: string, plugin: Partial<Plugin>) => void
 	reorderPostPlugins: (nodeId: string, pluginIds: string[]) => void
 	removePostPlugin: (nodeId: string, pluginId: string) => void
+	updateEnvironmentVariables: (envs: Record<string, string>) => void
+	getEnvironmentVariables: () => Record<string, string>
+	setEnvironmentVariables: (envs: Record<string, string>) => void
 	// addConnection: (nodeId: string, edgeId: string, connection: Connection) => void
 }
 
@@ -125,6 +134,9 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	},
 	changes: [],
 	isSaving: false,
+	saveError: null,
+	retryCount: 0,
+	serviceEnvs: {},
 	setMerchantAndService: (merchantId, serviceId) => set({ merchantId, serviceId }),
 	updateServiceMeta: (name, envs) => {
 		get().addChange({ changeType: MenuServiceChangeType.MetaChange, name, envs })
@@ -322,14 +334,23 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	},
 	clearChanges: () => set({ changes: [] }),
 
+	retrySave: () => {
+		set({ retryCount: 0, saveError: null })
+		get().save()
+	},
+
+	clearSaveError: () => {
+		set({ saveError: null })
+	},
+
 	save: debounce(async () => {
-		const { changes, save, merchantId, serviceId } = get()
+		const { changes, save, merchantId, serviceId, retryCount } = get()
 
 		if (!merchantId || !serviceId) return
 
 		if (get().isSaving || changes.length === 0) return
 
-		set({ isSaving: true })
+		set({ isSaving: true, saveError: null })
 
 		const changesToSave = [...changes]
 
@@ -337,12 +358,55 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			await applyServiceChanges(merchantId, serviceId, changesToSave)
 			set((state) => ({
 				changes: state.changes.slice(changesToSave.length),
+				retryCount: 0,
+				saveError: null,
 			}))
-		} catch {
-			// todo: Handle error
+
+			// Show success toast only if there was a previous error or retry
+			if (retryCount > 0) {
+				toast.success("Changes saved successfully")
+			}
+		} catch (error: any) {
+			const errorMessage =
+				error?.response?.data?.message || error?.message || "Failed to save changes"
+
+			set({
+				saveError: errorMessage,
+				retryCount: retryCount + 1,
+			})
+
+			// Show error toast with retry option for network errors
+			if (retryCount < 3) {
+				toast.error("Failed to save changes", {
+					description: `${errorMessage}. Will retry automatically...`,
+					action: {
+						label: "Retry Now",
+						onClick: () => get().retrySave(),
+					},
+				})
+
+				// Auto-retry after a delay (exponential backoff)
+				setTimeout(() => {
+					if (get().changes.length > 0 && get().retryCount <= 3) {
+						save()
+					}
+				}, Math.min(1000 * Math.pow(2, retryCount), 10000))
+			} else {
+				// Max retries reached
+				toast.error("Unable to save changes", {
+					description:
+						"Maximum retry attempts reached. Please check your connection and try again.",
+					action: {
+						label: "Retry",
+						onClick: () => get().retrySave(),
+					},
+				})
+			}
 		} finally {
 			set({ isSaving: false })
-			if (get().changes.length > 0) {
+
+			// Continue saving if there are more changes and no critical error
+			if (get().changes.length > 0 && get().retryCount < 3) {
 				save()
 			}
 		}
@@ -647,5 +711,18 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 
 		// Add the node removal change
 		addChange({ changeType: MenuServiceChangeType.NodeRemove, nodeId })
+	},
+
+	updateEnvironmentVariables: (envs: Record<string, string>) => {
+		set({ serviceEnvs: envs })
+		get().updateServiceMeta(undefined, envs)
+	},
+
+	getEnvironmentVariables: () => {
+		return get().serviceEnvs
+	},
+
+	setEnvironmentVariables: (envs: Record<string, string>) => {
+		set({ serviceEnvs: envs })
 	},
 }))

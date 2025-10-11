@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { EditableTitle } from "@/components/common/editable-title"
 import { ScrollArea } from "@/components//ui/scroll-area"
+import { EnvironmentVariablesSection } from "./environment-variables-section"
 import Image from "next/image"
 
 export function ToolSearchBar() {
@@ -218,6 +219,7 @@ export function ToolsPanel() {
 		<ScrollArea className="h-full p-2 space-y-3 w-78 bg-[#fdfdfe] rounded-3xl overflow-hidden">
 			<ServiceNameInput />
 			<ShortCodeOption />
+			<EnvironmentVariablesSection />
 			<div className="space-y-5 pt-3">
 				{TOOL_SECTIONS.map((section) => (
 					<ToolSection key={section.name} section={section} />

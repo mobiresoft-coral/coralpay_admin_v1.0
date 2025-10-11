@@ -23,6 +23,7 @@ function MenuBuilderProviderInner({
 	const setNodes = store((s) => s.setNodes)
 	const setEdges = store((s) => s.setEdges)
 	const setMerchantAndService = store((s) => s.setMerchantAndService)
+	const setEnvironmentVariables = store((s) => s.setEnvironmentVariables)
 
 	const nodes = store((s) => s.nodes)
 
@@ -36,8 +37,13 @@ function MenuBuilderProviderInner({
 		if (service?.data?.data) {
 			const { nodes } = transformServiceToNodesAndEdges(service.data.data)
 			setNodes(nodes)
+
+			// Initialize environment variables from service metadata
+			// Handle backward compatibility - if envs doesn't exist, use empty object
+			const envs = (service.data.data as any)?.envs || {}
+			setEnvironmentVariables(envs)
 		}
-	}, [service, setNodes])
+	}, [service, setNodes, setEnvironmentVariables])
 
 	// todo: we can optimize this further by only updating edges when a router plugin or directRoute is added/removed/updated
 	useEffect(() => {

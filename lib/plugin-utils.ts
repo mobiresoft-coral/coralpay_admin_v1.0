@@ -22,7 +22,7 @@ export function createApiPlugin(): ApiCallPlugin {
     id: crypto.randomUUID(),
     toolType: "plugin_apicall",
     type: "api_call",
-    // order: 0,
+    order: 0,
     config: {
       url: "",
       method: "GET",
@@ -37,7 +37,7 @@ export function createPaymentPlugin(): PaymentPlugin {
     id: crypto.randomUUID(),
     toolType: "plugin_payment",
     type: "payment",
-    // order: 0,
+    order: 0,
     config: {
       endTemplate: "",
       amount: "",
@@ -50,7 +50,7 @@ export function createRouterPlugin(): RouterPlugin {
     id: crypto.randomUUID(),
     toolType: "plugin_router",
     type: "router",
-    // order: 0,
+    order: 0,
     config: {
       routes: [{ id: getId(), condition: "", input: "" }],
       defaultRoute: "",
@@ -67,7 +67,7 @@ export function createValidationPlugin(
     id: crypto.randomUUID(),
     toolType,
     type: "validation",
-    // order: 0,
+    order: 0,
     config: {
       inputKey: "",
       regexp,
