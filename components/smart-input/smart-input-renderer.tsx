@@ -25,9 +25,10 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 	inputRef,
 }) => {
 	const [scrollLeft, setScrollLeft] = useState(0)
+	const [scrollTop, setScrollTop] = useState(0)
 	const overlayRef = useRef<HTMLDivElement>(null)
 
-	// Track input scroll position to sync overlay
+	// Track input/textarea scroll position to sync overlay
 	useEffect(() => {
 		const inputElement = inputRef?.current
 		if (!inputElement) return
@@ -42,6 +43,7 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 
 			rafId = requestAnimationFrame(() => {
 				setScrollLeft(inputElement.scrollLeft)
+				setScrollTop(inputElement.scrollTop)
 				rafId = null
 			})
 		}
@@ -131,9 +133,9 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 			className={clsx(
 				// Match input positioning and sizing exactly
 				"absolute inset-0 pointer-events-none",
-				"px-3 py-1", // Match input padding exactly
+				"px-3 py-2", // Match input/textarea padding exactly
 				"text-base md:text-sm", // Match input font size exactly
-				"h-9 flex items-center", // Match input height and vertical alignment
+				"min-h-9 flex items-start", // Match input height and vertical alignment, allow growth for textarea
 				"overflow-hidden box-border", // Ensure consistent box model
 				"font-mono", // Use monospace font for consistent character widths
 				className
@@ -141,9 +143,9 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 			aria-hidden="true" // Hide from screen readers as this is visual only
 		>
 			<div
-				className="w-full whitespace-nowrap"
+				className="w-full whitespace-pre-wrap"
 				style={{
-					transform: `translateX(-${scrollLeft}px)`,
+					transform: `translate(-${scrollLeft}px, -${scrollTop}px)`,
 					transition: "transform 0ms", // No transition for immediate sync
 				}}
 			>

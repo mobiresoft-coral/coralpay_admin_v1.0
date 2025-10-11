@@ -5,7 +5,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { SmartInput, SmartInputEnhanced } from "./index"
+import { SmartInput, SmartInputEnhanced, SmartTextarea } from "./index"
 
 const testVariables = {
 	API_KEY: "your-api-key-here",
@@ -17,6 +17,9 @@ const testVariables = {
 export const SmartInputTest: React.FC = () => {
 	const [value1, setValue1] = useState("Hello {{API_KEY}} world!")
 	const [value2, setValue2] = useState("Connect to {{DATABASE_URL}} on port {{PORT}}")
+	const [textareaValue, setTextareaValue] = useState(
+		"Multi-line text with {{API_KEY}}\nSecond line with {{DATABASE_URL}}\nThird line with {{PORT}}"
+	)
 
 	return (
 		<div className="p-6 space-y-6">
@@ -79,6 +82,19 @@ export const SmartInputTest: React.FC = () => {
 					This input tests cursor positioning with variables styled using only colors (no
 					bold/italic/padding).
 				</p>
+			</div>
+
+			<div>
+				<h3 className="text-lg font-semibold mb-2">SmartTextarea Test</h3>
+				<SmartTextarea
+					value={textareaValue}
+					onChange={(e) => setTextareaValue(e.target.value)}
+					variables={testVariables}
+					placeholder="Type {{ to see suggestions in textarea..."
+					rows={4}
+					className="w-full p-2 border rounded"
+				/>
+				<p className="text-sm text-gray-600 mt-1">Value: {textareaValue}</p>
 			</div>
 
 			<div>
