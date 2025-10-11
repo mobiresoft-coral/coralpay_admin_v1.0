@@ -18,7 +18,6 @@ import { useSmartInput } from "@/hooks/use-smart-input"
 import { SmartInputBase } from "./smart-input-base"
 import { SmartInputRenderer, SmartInputRendererMemo } from "./smart-input-renderer"
 import { EnvironmentSuggestions } from "./environment-suggestions"
-import { debounce } from "@/lib/debounce"
 
 /**
  * SmartInput component with environment variable suggestions and visual formatting
@@ -68,21 +67,13 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 		// Memoize variables object to prevent unnecessary re-renders
 		const memoizedVariables = useMemo(() => variables, [variables])
 
-		// Debounced onChange to reduce excessive updates
-		const debouncedOnChange = useMemo(
-			() => debounce(onChange, 150), // 150ms debounce for text parsing
-			[onChange]
-		)
-
 		// Memoized callback for handling changes
 		const handleChange = useCallback(
 			(newValue: string) => {
-				// Call immediate onChange for real-time updates
+				// Call onChange immediately for real-time updates
 				onChange(newValue)
-				// Also call debounced version for heavy operations
-				debouncedOnChange(newValue)
 			},
-			[onChange, debouncedOnChange]
+			[onChange]
 		)
 
 		// Main hook that provides all functionality
@@ -129,18 +120,6 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 			}
 		}, [])
 
-		// Register cleanup for debounced function
-		useEffect(() => {
-			const cleanup = () => {
-				// Cancel any pending debounced calls
-				// Note: The debounce function from our lib doesn't expose cancel method
-				// This is handled by the cleanup in the debounce implementation
-			}
-			cleanupRef.current.push(cleanup)
-
-			return cleanup
-		}, [debouncedOnChange])
-
 		return (
 			<div className="relative">
 				{/* Environment variable suggestions popover */}
@@ -161,7 +140,7 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 							segments={smartInput.textSegments}
 							variableStyle={variableStyle}
 							invalidVariableStyle={invalidVariableStyle}
-							className="z-0 h-full" 
+							className="z-0 h-full"
 						/>
 
 						{/* Base input field */}

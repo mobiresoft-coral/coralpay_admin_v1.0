@@ -19,7 +19,7 @@ import { useSmartInput } from "@/hooks/use-smart-input"
 import { SmartInputBase } from "./smart-input-base"
 import { SmartInputRenderer, SmartInputRendererMemo } from "./smart-input-renderer"
 import { EnvironmentSuggestions } from "./environment-suggestions"
-import { debounce } from "@/lib/debounce"
+
 import { SmartInputErrorBoundary } from "./smart-input-error-boundary"
 import {
 	handleUndefinedVariables,
@@ -108,21 +108,13 @@ export const SmartInputEnhanced = forwardRef<
 			)
 		}, [value, errorConfig, safeExecute])
 
-		// Debounced onChange to reduce excessive updates
-		const debouncedOnChange = useMemo(
-			() => debounce(onChange, 150), // 150ms debounce for text parsing
-			[onChange]
-		)
-
 		// Memoized callback for handling changes
 		const handleChange = useCallback(
 			(newValue: string) => {
-				// Call immediate onChange for real-time updates
+				// Call onChange immediately for real-time updates
 				onChange(newValue)
-				// Also call debounced version for heavy operations
-				debouncedOnChange(newValue)
 			},
-			[onChange, debouncedOnChange]
+			[onChange]
 		)
 
 		// Main hook that provides all functionality with error handling
@@ -217,18 +209,6 @@ export const SmartInputEnhanced = forwardRef<
 				cleanupRef.current = []
 			}
 		}, [])
-
-		// Register cleanup for debounced function
-		useEffect(() => {
-			const cleanup = () => {
-				// Cancel any pending debounced calls
-				// Note: The debounce function from our lib doesn't expose cancel method
-				// This is handled by the cleanup in the debounce implementation
-			}
-			cleanupRef.current.push(cleanup)
-
-			return cleanup
-		}, [debouncedOnChange])
 
 		return (
 			<div className="relative">
