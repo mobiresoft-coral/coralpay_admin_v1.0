@@ -73,7 +73,6 @@ async function interact(input: string, start: boolean = false) {
 }
 
 export function Simulator({ config }: SimulatorProps) {
-	console.log(config)
 
 	const screenText = `\
 	Select a menu option

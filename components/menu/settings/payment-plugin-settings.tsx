@@ -11,7 +11,6 @@ interface PaymentPluginSettingsProps {
 
 export function PaymentPluginSettings({ plugin, onSave }: PaymentPluginSettingsProps) {
 	const [config, setConfig] = useState(plugin.config)
-	console.log(config)
 
 	const debouncedOnSave = useDebouncer((newConfig: typeof config) => {
 		onSave(plugin.id, {
