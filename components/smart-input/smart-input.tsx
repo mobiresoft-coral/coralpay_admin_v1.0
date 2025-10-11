@@ -11,7 +11,7 @@
 
 "use client"
 
-import React, { forwardRef, useId, useMemo, useCallback, useEffect, useRef } from "react"
+import React, { forwardRef, useId, useMemo, useEffect, useRef } from "react"
 import { clsx } from "clsx"
 import { SmartInputProps } from "@/types/smart-input"
 import { useSmartInput } from "@/hooks/use-smart-input"
@@ -134,6 +134,7 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 							variableStyle={variableStyle}
 							invalidVariableStyle={invalidVariableStyle}
 							className="z-0 h-full"
+							inputRef={smartInput.inputRef}
 						/>
 
 						{/* Base input field */}

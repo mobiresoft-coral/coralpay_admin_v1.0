@@ -5,7 +5,7 @@
  * Uses an overlay approach to render styled text segments over the input field.
  */
 
-import React from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { clsx } from "clsx"
 import { SmartInputRendererProps, TextSegment } from "@/types/smart-input"
 import { DEFAULT_VARIABLE_STYLE, DEFAULT_INVALID_VARIABLE_STYLE } from "@/lib/smart-input-constants"
@@ -15,13 +15,63 @@ import { DEFAULT_VARIABLE_STYLE, DEFAULT_INVALID_VARIABLE_STYLE } from "@/lib/sm
  *
  * This component creates an overlay that renders styled text segments
  * while maintaining proper alignment with the underlying input field.
+ * It tracks the input's scroll position to keep the overlay synchronized.
  */
 export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 	segments,
 	variableStyle = DEFAULT_VARIABLE_STYLE,
 	invalidVariableStyle = DEFAULT_INVALID_VARIABLE_STYLE,
 	className,
+	inputRef,
 }) => {
+	const [scrollLeft, setScrollLeft] = useState(0)
+	const overlayRef = useRef<HTMLDivElement>(null)
+
+	// Track input scroll position to sync overlay
+	useEffect(() => {
+		const inputElement = inputRef?.current
+		if (!inputElement) return
+
+		let rafId: number | null = null
+
+		const handleScroll = () => {
+			// Use requestAnimationFrame to throttle scroll updates for better performance
+			if (rafId) {
+				cancelAnimationFrame(rafId)
+			}
+
+			rafId = requestAnimationFrame(() => {
+				setScrollLeft(inputElement.scrollLeft)
+				rafId = null
+			})
+		}
+
+		// Listen for scroll events on the input
+		inputElement.addEventListener("scroll", handleScroll)
+
+		// Also listen for input events that might cause scrolling
+		inputElement.addEventListener("input", handleScroll)
+
+		// Listen for cursor position changes that might cause scrolling
+		inputElement.addEventListener("keyup", handleScroll)
+		inputElement.addEventListener("click", handleScroll)
+		inputElement.addEventListener("focus", handleScroll)
+
+		// Initial sync
+		handleScroll()
+
+		return () => {
+			if (rafId) {
+				cancelAnimationFrame(rafId)
+			}
+			inputElement.removeEventListener("scroll", handleScroll)
+			inputElement.removeEventListener("input", handleScroll)
+			inputElement.removeEventListener("keyup", handleScroll)
+			inputElement.removeEventListener("click", handleScroll)
+			inputElement.removeEventListener("focus", handleScroll)
+		}
+	}, [inputRef])
+
 	/**
 	 * Render individual text segment with appropriate styling
 	 */
@@ -77,6 +127,7 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 
 	return (
 		<div
+			ref={overlayRef}
 			className={clsx(
 				// Match input positioning and sizing exactly
 				"absolute inset-0 pointer-events-none",
@@ -89,7 +140,15 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 			)}
 			aria-hidden="true" // Hide from screen readers as this is visual only
 		>
-			<div className="w-full whitespace-nowrap overflow-hidden">{segments.map(renderSegment)}</div>
+			<div
+				className="w-full whitespace-nowrap"
+				style={{
+					transform: `translateX(-${scrollLeft}px)`,
+					transition: "transform 0ms", // No transition for immediate sync
+				}}
+			>
+				{segments.map(renderSegment)}
+			</div>
 		</div>
 	)
 }
@@ -128,7 +187,8 @@ export const SmartInputRendererMemo = React.memo(SmartInputRenderer, (prevProps,
 	if (
 		JSON.stringify(prevVarStyle) !== JSON.stringify(nextVarStyle) ||
 		JSON.stringify(prevInvalidStyle) !== JSON.stringify(nextInvalidStyle) ||
-		prevProps.className !== nextProps.className
+		prevProps.className !== nextProps.className ||
+		prevProps.inputRef !== nextProps.inputRef
 	) {
 		return false
 	}

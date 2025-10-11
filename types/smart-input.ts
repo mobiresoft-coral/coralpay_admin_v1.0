@@ -115,6 +115,7 @@ export interface SmartInputRendererProps {
 	variableStyle?: VariableStyle
 	invalidVariableStyle?: VariableStyle
 	className?: string
+	inputRef?: React.RefObject<HTMLInputElement | null>
 }
 
 /**

@@ -222,6 +222,7 @@ export const SmartInputEnhanced = forwardRef<
 							variableStyle={variableStyle}
 							invalidVariableStyle={invalidVariableStyle}
 							className="z-0"
+							inputRef={smartInput.inputRef}
 						/>
 
 						{/* Base input field */}
