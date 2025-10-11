@@ -52,3 +52,16 @@ export type SimulatorConfig = {
 	open: boolean
 	startNodeId?: string
 }
+
+// Smart Input types
+export type {
+	TextSegment,
+	SuggestionItem,
+	VariableStyle,
+	SmartInputProps,
+	SmartInputState,
+	SuggestionTrigger,
+	EnvironmentSuggestionsProps,
+	SmartInputRendererProps,
+	SmartInputBaseProps,
+} from "./smart-input"
