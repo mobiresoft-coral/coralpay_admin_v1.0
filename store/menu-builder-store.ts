@@ -96,8 +96,8 @@ type MenuBuilderActions = {
 		meta: {
 			name?: string
 			directRoute?: {
-				edgeId: string,
-				targetMenuId: string,
+				edgeId: string
+				targetMenuId: string
 			}
 			renderTemplate?: string
 			meta?: Record<string, any>
@@ -471,8 +471,6 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 				plugin: plugin as any,
 			})
 		})
-		
-
 	},
 
 	deleteEdge: (edgeId) => {
@@ -513,7 +511,6 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	updateNodeData: (nodeId, dispatch) => {
 		const { nodes, setNodes, addChange } = get()
 
-	
 		setNodes(
 			nodes.map((n) =>
 				n.id === nodeId
@@ -528,14 +525,14 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			)
 		)
 
-
 		addChange({
 			changeType: MenuServiceChangeType.NodeMetaChange,
 			nodeId,
-			
-			...(typeof dispatch === "function" ? dispatch(nodes.find((n) => n.id === nodeId)!) : dispatch),
-		})
 
+			...(typeof dispatch === "function"
+				? dispatch(nodes.find((n) => n.id === nodeId)!)
+				: dispatch),
+		})
 	},
 
 	updateNode: (nodeId, dispatch) => {
@@ -574,18 +571,81 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	},
 
 	removeNode: (nodeId) => {
-		const { addChange, nodes, setNodes, edges, setEdges } = get()
-		const updatedEdges = edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+		const {
+			addChange,
+			nodes,
+			setNodes,
+			edges,
+			setEdges,
+			updateNodeMeta,
+			updatePrePlugin,
+			updatePostPlugin,
+		} = get()
 
-		setNodes(nodes.filter((n) => n.id !== nodeId))
-		setEdges(updatedEdges)
-		const linkedEdges = edges.filter(edge => edge.target === nodeId)
+		// Create a map for fast node lookup
+		const nodeMap = new Map(nodes.map((node) => [node.id, node]))
 
+		// Find all edges that point to the node being removed
+		const linkedEdges = edges.filter((edge) => edge.target === nodeId)
+
+		// Process each linked edge to clean up references
 		for (const edge of linkedEdges) {
-			const nodeId = edge.source
+			const sourceNodeId = edge.source
 			const edgeId = edge.id
-			const pluginId = edge.sourceHandle
+			const sourceNode = nodeMap.get(sourceNodeId)
+
+			if (!sourceNode) continue
+
+			// Handle direct routes (for start nodes)
+			if (sourceNode.data.directRoute?.edgeId === edgeId) {
+				updateNodeMeta(sourceNodeId, {
+					directRoute: {
+						edgeId: "",
+						targetMenuId: "",
+					},
+				})
+			}
+
+			// Handle router plugin routes
+			const allPlugins = [
+				...(sourceNode.data.prePlugins || []).map((p) => ({ plugin: p, isPost: false })),
+				...(sourceNode.data.postPlugins || []).map((p) => ({ plugin: p, isPost: true })),
+			]
+
+			for (const { plugin, isPost } of allPlugins) {
+				if (plugin.type === "router" && plugin.config?.routes) {
+					const routeToUpdate = plugin.config.routes.find((route) => route.targetMenuId === nodeId)
+
+					if (routeToUpdate) {
+						const updatedPlugin = {
+							...plugin,
+							config: {
+								...plugin.config,
+								routes: plugin.config.routes.map((route) =>
+									route.targetMenuId === nodeId ? { ...route, targetMenuId: "", edgeId: "" } : route
+								),
+							},
+						}
+
+						if (isPost) {
+							updatePostPlugin(sourceNodeId, plugin.id, updatedPlugin)
+						} else {
+							updatePrePlugin(sourceNodeId, plugin.id, updatedPlugin)
+						}
+					}
+				}
+			}
 		}
+
+		// Remove all edges connected to this node
+
+		// Remove the node and update edges
+		set((state) => ({
+			nodes: state.nodes.filter((n) => n.id !== nodeId),
+			edges: state.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
+		}))
+
+		// Add the node removal change
 		addChange({ changeType: MenuServiceChangeType.NodeRemove, nodeId })
 	},
 }))

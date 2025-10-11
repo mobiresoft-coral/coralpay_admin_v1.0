@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/plain-input"
 import { useCallback, useState, type ChangeEvent } from "react"
 import { useDebouncer } from "@/hooks/use-debouncer"
 import type { ValidationPlugin } from "@mobiresoft-coral/ussd-shared-core"
