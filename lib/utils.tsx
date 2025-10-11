@@ -33,12 +33,14 @@ export const determineToolColor = (toolType: ToolType) => {
 }
 
 export const objectToKeyValuePairs = (obj?: Record<string, string>): KeyValuePair[] => {
+	console.log(obj)
 	if (!obj) return [{ key: "", value: "", id: getId() }]
 	const pairs = Object.entries(obj).map(([key, value]) => ({
 		key,
 		value: value || "",
 		id: getId(),
 	}))
+
 	return pairs.length > 0 ? pairs : [{ key: "", value: "", id: getId() }]
 }
 

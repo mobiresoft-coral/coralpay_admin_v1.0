@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/plain-input"
 import { Button } from "@/components/ui/button"
 import { Plus, Trash2 } from "lucide-react"
 import type { KeyValuePair } from "@/types"

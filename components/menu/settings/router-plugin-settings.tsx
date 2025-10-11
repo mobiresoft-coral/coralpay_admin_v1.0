@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/plain-input"
 import { DEBOUNCE_TIME } from "@/constants/common"
 import { useDebouncer } from "@/hooks/use-debouncer"
 import type { Route } from "@mobiresoft-coral/ussd-shared-core"

@@ -131,7 +131,7 @@ function SortablePluginItem({
 			</PopoverTrigger>
 			<PopoverContent
 				side="left"
-				className="rounded-lg border shadow-md p-4 min-w-80 max-h-[30rem] overflow-y-auto"
+				className="rounded-lg border-none shadow-md p-4 min-w-80 max-h-[30rem] overflow-y-auto"
 			>
 				{(() => {
 					switch (plugin.type) {

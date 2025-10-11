@@ -9,6 +9,7 @@ import {
 	type NodeChange,
 	type EdgeChange,
 	type NodeProps,
+	Connection,
 } from "@xyflow/react"
 import type { EdgeData, NodeData, NodeType, Plugin, SimulatorConfig, ToolType } from "@/types"
 
@@ -94,6 +95,10 @@ type MenuBuilderActions = {
 		nodeId: string,
 		meta: {
 			name?: string
+			directRoute?: {
+				edgeId: string,
+				targetMenuId: string,
+			}
 			renderTemplate?: string
 			meta?: Record<string, any>
 		}
@@ -106,6 +111,7 @@ type MenuBuilderActions = {
 	updatePostPlugin: (nodeId: string, pluginId: string, plugin: Partial<Plugin>) => void
 	reorderPostPlugins: (nodeId: string, pluginIds: string[]) => void
 	removePostPlugin: (nodeId: string, pluginId: string) => void
+	// addConnection: (nodeId: string, edgeId: string, connection: Connection) => void
 }
 
 export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((set, get) => ({
@@ -450,6 +456,23 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 			type: node.data.type,
 			directRoute: node.data.directRoute,
 		})
+
+		node.data.postPlugins?.forEach((plugin) => {
+			addChange({
+				changeType: MenuServiceChangeType.PostPluginAdd,
+				nodeId: node.id,
+				plugin: plugin as any,
+			})
+		})
+		node.data.prePlugins?.forEach((plugin) => {
+			addChange({
+				changeType: MenuServiceChangeType.PrePluginAdd,
+				nodeId: node.id,
+				plugin: plugin as any,
+			})
+		})
+		
+
 	},
 
 	deleteEdge: (edgeId) => {
@@ -488,7 +511,9 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	},
 
 	updateNodeData: (nodeId, dispatch) => {
-		const { nodes, setNodes } = get()
+		const { nodes, setNodes, addChange } = get()
+
+	
 		setNodes(
 			nodes.map((n) =>
 				n.id === nodeId
@@ -502,6 +527,15 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 					: n
 			)
 		)
+
+
+		addChange({
+			changeType: MenuServiceChangeType.NodeMetaChange,
+			nodeId,
+			
+			...(typeof dispatch === "function" ? dispatch(nodes.find((n) => n.id === nodeId)!) : dispatch),
+		})
+
 	},
 
 	updateNode: (nodeId, dispatch) => {
@@ -542,8 +576,16 @@ export const menuBuilderStore = create<MenuBuilderState & MenuBuilderActions>((s
 	removeNode: (nodeId) => {
 		const { addChange, nodes, setNodes, edges, setEdges } = get()
 		const updatedEdges = edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+
 		setNodes(nodes.filter((n) => n.id !== nodeId))
 		setEdges(updatedEdges)
+		const linkedEdges = edges.filter(edge => edge.target === nodeId)
+
+		for (const edge of linkedEdges) {
+			const nodeId = edge.source
+			const edgeId = edge.id
+			const pluginId = edge.sourceHandle
+		}
 		addChange({ changeType: MenuServiceChangeType.NodeRemove, nodeId })
 	},
 }))

@@ -12,7 +12,7 @@ export function StartNode({ id, data }: NodeProps<Node<NodeData>>) {
 	const addEdge = store((s) => s.addEdge)
 	const deleteEdge = store((s) => s.deleteEdge)
 
-	const { updateNodeData } = useNodeAction()
+	const { updateNodeMeta } = useNodeAction()
 
 	return (
 		<NodeWrapper>
@@ -39,7 +39,7 @@ export function StartNode({ id, data }: NodeProps<Node<NodeData>>) {
 							
 						})
 
-						updateNodeData({
+						updateNodeMeta({
 							directRoute: {
 								targetMenuId: connection.target!,
 								edgeId,

@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/plain-input"
 import { useCallback, useState, type ChangeEvent } from "react"
 import { useDebouncer } from "@/hooks/use-debouncer"
 import type { PaymentPlugin } from "@mobiresoft-coral/ussd-shared-core"
@@ -11,6 +11,7 @@ interface PaymentPluginSettingsProps {
 
 export function PaymentPluginSettings({ plugin, onSave }: PaymentPluginSettingsProps) {
 	const [config, setConfig] = useState(plugin.config)
+	console.log(config)
 
 	const debouncedOnSave = useDebouncer((newConfig: typeof config) => {
 		onSave(plugin.id, {
