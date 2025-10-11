@@ -15,7 +15,7 @@ export function RouterPluginSettings({ route, onSave }: RouterPluginSettingsProp
 	const [internalRoute, setInternalRoute] = useState(route)
 
 	const store = useMenuBuilderStore()
-	const envs = store(s => s.serviceEnvs)
+	const envs = store((s) => s.serviceEnvs)
 
 	const debouncedOnSave = useDebouncer((newRoute: Route) => {
 		onSave(newRoute.id, newRoute)
@@ -35,31 +35,22 @@ export function RouterPluginSettings({ route, onSave }: RouterPluginSettingsProp
 		updateRoute({ condition: e.target.value })
 	}
 
-	const onTargetChangeSmart = (value: string) => {
-		updateRoute({ input: value })
-	}
-
 	return (
 		<div className="flex flex-col gap-y-2">
 			<SmartInput
 				placeholder="Enter target"
 				className="focus-visible:border-0 focus-visible:ring-2 h-11"
 				value={internalRoute.input}
-				onChange={onTargetChangeSmart}
+				onChange={onTargetChange}
 				variables={envs}
 			/>
-			<Input
-				placeholder="Enter target"
-				className="focus-visible:border-0 focus-visible:ring-2 h-11"
-				value={internalRoute.input}
-				onChange={onTargetChange}
-			/>
 			<div className="p-2 border rounded-lg bg-gray-100">Matches</div>
-			<Input
+			<SmartInput
 				placeholder="Enter condition"
 				className="focus-visible:border-0 focus-visible:ring-2 h-11"
 				value={internalRoute.condition}
 				onChange={onConditionChange}
+				variables={envs}
 			/>
 		</div>
 	)

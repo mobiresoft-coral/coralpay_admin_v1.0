@@ -16,7 +16,7 @@ import { clsx } from "clsx"
 import { SmartInputProps } from "@/types/smart-input"
 import { useSmartInput } from "@/hooks/use-smart-input"
 import { SmartInputBase } from "./smart-input-base"
-import { SmartInputRenderer, SmartInputRendererMemo } from "./smart-input-renderer"
+import { SmartInputRenderer } from "./smart-input-renderer"
 import { EnvironmentSuggestions } from "./environment-suggestions"
 
 /**
@@ -67,19 +67,10 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 		// Memoize variables object to prevent unnecessary re-renders
 		const memoizedVariables = useMemo(() => variables, [variables])
 
-		// Memoized callback for handling changes
-		const handleChange = useCallback(
-			(newValue: string) => {
-				// Call onChange immediately for real-time updates
-				onChange(newValue)
-			},
-			[onChange]
-		)
-
 		// Main hook that provides all functionality
 		const smartInput = useSmartInput({
 			value,
-			onChange: handleChange,
+			onChange,
 			variables: memoizedVariables,
 			onFocus,
 			onBlur,
@@ -147,11 +138,8 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 						<SmartInputBase
 							ref={ref || smartInput.inputRef}
 							value={value}
-							onChange={(newValue) => {
-								// Handle the string value from SmartInputBase
-								handleChange(newValue)
-							}}
-							onCursorPositionChange={(position) => {
+							onChange={smartInput.handleInputChange}
+							onCursorPositionChange={() => {
 								// Update cursor position in smart input hook
 								// This is handled internally by the hook
 							}}

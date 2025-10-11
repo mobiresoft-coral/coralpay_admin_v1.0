@@ -40,16 +40,10 @@ export interface VariableStyle {
 /**
  * Main SmartInput component props
  */
-export interface SmartInputProps
-	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+export interface SmartInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	value: string
-	onChange: (value: string) => void
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 	variables?: Record<string, string>
-	placeholder?: string
-	disabled?: boolean
-	className?: string
-	onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
-	onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 
 	// Styling options for environment variable references
 	variableStyle?: VariableStyle
@@ -129,7 +123,7 @@ export interface SmartInputRendererProps {
 export interface SmartInputBaseProps
 	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
 	value: string
-	onChange: (value: string) => void
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 	onCursorPositionChange?: (position: number) => void
 	onSelectionChange?: (start: number, end: number) => void
 	className?: string

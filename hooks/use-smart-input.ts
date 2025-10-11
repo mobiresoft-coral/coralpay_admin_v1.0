@@ -36,7 +36,7 @@ import {
 
 interface UseSmartInputProps {
 	value: string
-	onChange: (value: string) => void
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 	variables?: Record<string, string>
 	onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
 	onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
@@ -142,6 +142,38 @@ export const useSmartInput = ({
 	onBlur,
 	errorConfig = DEFAULT_ERROR_CONFIG,
 }: UseSmartInputProps): UseSmartInputReturn => {
+	// Helper to create synthetic change events
+	const createChangeEvent = useCallback((newValue: string): React.ChangeEvent<HTMLInputElement> => {
+		// Create a more complete synthetic event that matches React's ChangeEvent interface
+		const target =
+			inputRef.current ||
+			({
+				value: newValue,
+				name: "",
+				type: "text",
+			} as HTMLInputElement)
+
+		return {
+			target: { ...target, value: newValue },
+			currentTarget: { ...target, value: newValue },
+			type: "change",
+			bubbles: true,
+			cancelable: true,
+			timeStamp: Date.now(),
+			isTrusted: false,
+			preventDefault: () => {},
+			stopPropagation: () => {},
+			nativeEvent: {} as Event,
+		} as React.ChangeEvent<HTMLInputElement>
+	}, [])
+
+	// Helper to call onChange with proper event
+	const callOnChange = useCallback(
+		(newValue: string) => {
+			onChange(createChangeEvent(newValue))
+		},
+		[onChange, createChangeEvent]
+	)
 	// Input element ref
 	const inputRef = useRef<HTMLInputElement>(null)
 
@@ -164,10 +196,18 @@ export const useSmartInput = ({
 		setCursorPosition(position)
 	}, [])
 
+	// Wrapper for suggestion trigger that converts React event to string
+	const handleSuggestionChange = useCallback(
+		(newValue: string) => {
+			callOnChange(newValue)
+		},
+		[callOnChange]
+	)
+
 	// Suggestion trigger hook with error handling
 	const suggestionTrigger = useSuggestionTrigger({
 		value,
-		onChange,
+		onChange: handleSuggestionChange,
 		variables,
 		cursorPosition,
 		onCursorPositionChange: handleCursorPositionChange,
@@ -311,7 +351,7 @@ export const useSmartInput = ({
 				console.warn("Text insertion warnings:", result.warnings)
 			}
 
-			onChange(result.newText)
+			callOnChange(result.newText)
 			setTimeout(() => setCursorPositionUtil(result.newCursorPosition), 0)
 
 			// Update history state
@@ -368,7 +408,7 @@ export const useSmartInput = ({
 					)
 				}
 
-				onChange(result.newText)
+				callOnChange(result.newText)
 				setTimeout(() => setCursorPositionUtil(result.newCursorPosition), 0)
 
 				// Update history state
@@ -475,24 +515,24 @@ export const useSmartInput = ({
 	const undo = useCallback(() => {
 		const previousState = textHistoryRef.current.undo()
 		if (previousState) {
-			onChange(previousState.text)
+			callOnChange(previousState.text)
 			setTimeout(() => setCursorPositionUtil(previousState.cursorPosition), 0)
 
 			setCanUndo(textHistoryRef.current.canUndo())
 			setCanRedo(textHistoryRef.current.canRedo())
 		}
-	}, [onChange, setCursorPositionUtil])
+	}, [callOnChange, setCursorPositionUtil])
 
 	const redo = useCallback(() => {
 		const nextState = textHistoryRef.current.redo()
 		if (nextState) {
-			onChange(nextState.text)
+			callOnChange(nextState.text)
 			setTimeout(() => setCursorPositionUtil(nextState.cursorPosition), 0)
 
 			setCanUndo(textHistoryRef.current.canUndo())
 			setCanRedo(textHistoryRef.current.canRedo())
 		}
-	}, [onChange, setCursorPositionUtil])
+	}, [callOnChange, setCursorPositionUtil])
 
 	// Enhanced programmatic updates with intelligent cursor positioning
 	const updateValue = useCallback(
@@ -544,7 +584,7 @@ export const useSmartInput = ({
 					}
 				}
 
-				onChange(newValue)
+				callOnChange(newValue)
 				setTimeout(() => {
 					setCursorPositionUtil(result.newCursorPosition, false) // Don't snap again
 					if (result.newSelectionStart !== result.newSelectionEnd) {
@@ -605,7 +645,7 @@ export const useSmartInput = ({
 				console.warn("Text replacement warnings:", result.warnings)
 			}
 
-			onChange(result.newText)
+			callOnChange(result.newText)
 			setTimeout(() => setCursorPositionUtil(result.newCursorPosition), 0)
 
 			// Update history state
@@ -645,14 +685,14 @@ export const useSmartInput = ({
 			// Add to history before change
 			textHistoryRef.current.addState(value, cursorPosition)
 
-			onChange(result.newText)
+			callOnChange(result.newText)
 			setTimeout(() => setCursorPositionUtil(result.newCursorPosition), 0)
 
 			// Update history state
 			setCanUndo(textHistoryRef.current.canUndo())
 			setCanRedo(textHistoryRef.current.canRedo())
 		},
-		[value, cursorPosition, variables, onChange, setCursorPositionUtil]
+		[value, cursorPosition, variables, callOnChange, setCursorPositionUtil]
 	)
 
 	const handleCut = useCallback(
@@ -668,7 +708,7 @@ export const useSmartInput = ({
 			// Add to history before change
 			textHistoryRef.current.addState(value, cursorPosition)
 
-			onChange(result.newText)
+			callOnChange(result.newText)
 			setTimeout(() => setCursorPositionUtil(result.newCursorPosition), 0)
 
 			// Update history state

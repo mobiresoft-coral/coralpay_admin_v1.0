@@ -53,8 +53,8 @@ export const SmartInputBase = forwardRef<HTMLInputElement, SmartInputBaseProps>(
 		 */
 		const handleChange = useCallback(
 			(event: React.ChangeEvent<HTMLInputElement>) => {
-				const newValue = event.target.value
-				onChange(newValue)
+				// Pass the React event directly to maintain standard input behavior
+				onChange(event)
 
 				// Track cursor position after change
 				if (onCursorPositionChange) {

@@ -35,7 +35,7 @@ export const BasicSmartInputExample: React.FC = () => {
 			<h3 className="text-lg font-semibold">Basic SmartInput Example</h3>
 			<SmartInput
 				value={value}
-				onChange={setValue}
+				onChange={(e) => setValue(e.target.value)}
 				variables={EXAMPLE_VARIABLES}
 				placeholder="Type {{ to see environment variable suggestions"
 				className="w-full"
@@ -72,7 +72,7 @@ export const OptimizedSmartInputExample: React.FC = () => {
 
 			<SmartInputMemo
 				value={value}
-				onChange={setValue}
+				onChange={(e) => setValue(e.target.value)}
 				variables={EXAMPLE_VARIABLES}
 				disabled={disabled}
 				placeholder="This uses the memoized version for better performance"
@@ -125,7 +125,7 @@ export const FormIntegrationExample: React.FC = () => {
 						id="apiEndpoint"
 						name="apiEndpoint"
 						value={formData.apiEndpoint}
-						onChange={(value) => setFormData((prev) => ({ ...prev, apiEndpoint: value }))}
+						onChange={(e) => setFormData((prev) => ({ ...prev, apiEndpoint: e.target.value }))}
 						variables={EXAMPLE_VARIABLES}
 						placeholder="Enter API endpoint URL"
 						required
@@ -141,7 +141,9 @@ export const FormIntegrationExample: React.FC = () => {
 						id="databaseConnection"
 						name="databaseConnection"
 						value={formData.databaseConnection}
-						onChange={(value) => setFormData((prev) => ({ ...prev, databaseConnection: value }))}
+						onChange={(e) =>
+							setFormData((prev) => ({ ...prev, databaseConnection: e.target.value }))
+						}
 						variables={EXAMPLE_VARIABLES}
 						placeholder="Enter database connection string"
 						required
@@ -157,7 +159,7 @@ export const FormIntegrationExample: React.FC = () => {
 						id="jwtSecret"
 						name="jwtSecret"
 						value={formData.jwtSecret}
-						onChange={(value) => setFormData((prev) => ({ ...prev, jwtSecret: value }))}
+						onChange={(e) => setFormData((prev) => ({ ...prev, jwtSecret: e.target.value }))}
 						variables={EXAMPLE_VARIABLES}
 						placeholder="Enter JWT secret"
 						required

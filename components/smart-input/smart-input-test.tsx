@@ -24,7 +24,7 @@ export const SmartInputTest: React.FC = () => {
 				<h3 className="text-lg font-semibold mb-2">Original SmartInput</h3>
 				<SmartInput
 					value={value1}
-					onChange={setValue1}
+					onChange={(e) => setValue1(e.target.value)}
 					variables={testVariables}
 					placeholder="Type {{ to see suggestions..."
 					className="w-full p-2 border rounded"
@@ -52,7 +52,7 @@ export const SmartInputTest: React.FC = () => {
 				<h3 className="text-lg font-semibold mb-2">Enhanced SmartInput with Error Handling</h3>
 				<SmartInputEnhanced
 					value={value2}
-					onChange={setValue2}
+					onChange={(e) => setValue2(e.target.value)}
 					variables={testVariables}
 					placeholder="Type {{ to see suggestions..."
 					className="w-full p-2 border rounded"
