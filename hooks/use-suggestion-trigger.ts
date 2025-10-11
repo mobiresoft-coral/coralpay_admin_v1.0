@@ -72,7 +72,7 @@ export const useSuggestionTrigger = ({
 	const debouncedFilterSuggestions = useCallback(
 		debounce((query: string) => {
 			try {
-				const filtered = filterSuggestions(variables, query, errorConfig)
+				const filtered = filterSuggestions(variables, query)
 				const limitedSuggestions = filtered.slice(0, MAX_SUGGESTIONS)
 				setSuggestions(limitedSuggestions)
 				setSelectedIndex(0) // Reset selection when suggestions change

@@ -8,7 +8,10 @@
 import React, { Component, ReactNode } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { generateErrorBoundaryFallback, ErrorBoundaryFallbackProps } from "@/lib/smart-input-error-handling"
+import {
+	generateErrorBoundaryFallback,
+	ErrorBoundaryFallbackProps,
+} from "@/lib/smart-input-error-handling"
 
 interface SmartInputErrorBoundaryState {
 	hasError: boolean
@@ -40,7 +43,7 @@ const DefaultErrorFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 			<AlertTitle>{fallbackData.title}</AlertTitle>
 			<AlertDescription className="space-y-2">
 				<p>{fallbackData.message}</p>
-				
+
 				<div className="space-y-1">
 					<p className="font-medium text-sm">Suggestions:</p>
 					<ul className="text-sm space-y-1">
@@ -52,14 +55,9 @@ const DefaultErrorFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 						))}
 					</ul>
 				</div>
-				
+
 				{fallbackData.canRecover && (
-					<Button
-						onClick={resetError}
-						variant="outline"
-						size="sm"
-						className="mt-3"
-					>
+					<Button onClick={resetError} variant="outline" size="sm" className="mt-3">
 						Try Again
 					</Button>
 				)}
@@ -79,7 +77,7 @@ export class SmartInputErrorBoundary extends Component<
 
 	constructor(props: SmartInputErrorBoundaryProps) {
 		super(props)
-		
+
 		this.state = {
 			hasError: false,
 			error: null,
@@ -153,12 +151,10 @@ export class SmartInputErrorBoundary extends Component<
 						<AlertTitle>SmartInput Unavailable</AlertTitle>
 						<AlertDescription>
 							<p>
-								The SmartInput component has encountered repeated errors and is temporarily unavailable.
-								Please refresh the page or contact support.
+								The SmartInput component has encountered repeated errors and is temporarily
+								unavailable. Please refresh the page or contact support.
 							</p>
-							<p className="text-sm mt-2 opacity-75">
-								Error: {error.message}
-							</p>
+							<p className="text-sm mt-2 opacity-75">Error: {error.message}</p>
 						</AlertDescription>
 					</Alert>
 				)
@@ -221,18 +217,14 @@ export const useSmartInputErrorHandler = (
 			if (enableLogging) {
 				console.error(`SmartInput Error${context ? ` (${context})` : ""}:`, error)
 			}
-			
+
 			onError?.(error)
 		},
 		[onError, enableLogging]
 	)
 
 	const safeExecute = React.useCallback(
-		<T>(
-			operation: () => T,
-			fallbackValue: T,
-			context?: string
-		): T => {
+		function <T>(operation: () => T, fallbackValue: T, context?: string): T {
 			try {
 				return operation()
 			} catch (error) {

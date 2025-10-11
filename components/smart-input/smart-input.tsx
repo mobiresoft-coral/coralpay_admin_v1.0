@@ -157,11 +157,11 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 					{/* Container for input and overlay */}
 					<div className="relative">
 						{/* Visual renderer overlay - using memoized version */}
-						<SmartInputRendererMemo
+						<SmartInputRenderer
 							segments={smartInput.textSegments}
 							variableStyle={variableStyle}
 							invalidVariableStyle={invalidVariableStyle}
-							className="z-0"
+							className="z-0 h-full" 
 						/>
 
 						{/* Base input field */}

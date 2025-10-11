@@ -119,7 +119,9 @@ export const useOptimizedTextParsing = (
 				// Limit cache size to prevent memory leaks
 				if (cacheRef.current.size > 100) {
 					const firstKey = cacheRef.current.keys().next().value
-					cacheRef.current.delete(firstKey)
+					if (firstKey) {
+						cacheRef.current.delete(firstKey)
+					}
 				}
 
 				callback(segments)

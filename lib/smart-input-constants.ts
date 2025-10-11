@@ -7,24 +7,26 @@ import { VariableStyle } from "@/types/smart-input"
 
 /**
  * Default styling for valid environment variable references
+ * Minimal styling with only color and italics for clean appearance
  */
 export const DEFAULT_VARIABLE_STYLE: VariableStyle = {
-	backgroundColor: "rgb(219 234 254)", // bg-blue-100 - slightly more visible
-	fontWeight: "bold", // Restore bold styling
-	fontStyle: "italic", // Restore italic styling
-	textColor: "rgb(29 78 216)", // text-blue-700 - darker for better contrast
-	borderRadius: "0.25rem", // Restore border radius
+	backgroundColor: "transparent", // No background
+	fontWeight: "normal", // Same as regular text
+	fontStyle: "italic", // Italic for distinction
+	textColor: "rgb(37 99 235)", // Blue color for visibility
+	borderRadius: "0", // No border radius
 }
 
 /**
  * Default styling for invalid environment variable references
+ * Minimal styling with only color and italics for clean appearance
  */
 export const DEFAULT_INVALID_VARIABLE_STYLE: VariableStyle = {
-	backgroundColor: "rgb(254 226 226)", // bg-red-100 - slightly more visible
-	fontWeight: "bold", // Restore bold styling
-	fontStyle: "italic", // Restore italic styling
-	textColor: "rgb(185 28 28)", // text-red-700 - darker for better contrast
-	borderRadius: "0.25rem", // Restore border radius
+	backgroundColor: "transparent", // No background
+	fontWeight: "normal", // Same as regular text
+	fontStyle: "italic", // Italic for distinction
+	textColor: "rgb(220 38 38)", // Red color for errors
+	borderRadius: "0", // No border radius
 }
 
 /**

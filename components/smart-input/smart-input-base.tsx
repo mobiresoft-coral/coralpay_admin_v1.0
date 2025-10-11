@@ -223,6 +223,8 @@ export const SmartInputBase = forwardRef<HTMLInputElement, SmartInputBaseProps>(
 					"text-transparent caret-black dark:caret-white",
 					// Ensure proper z-index for cursor visibility
 					"relative z-10",
+					// Use monospace font for consistent character widths
+					"font-mono",
 					className
 				)}
 				// Accessibility attributes

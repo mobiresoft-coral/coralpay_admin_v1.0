@@ -5,6 +5,7 @@
 
 import { TextSegment, SuggestionItem } from "@/types/smart-input"
 import { isValidVariableName, generateId } from "./smart-input-validation"
+import Fuse, { FuseResult } from "fuse.js"
 
 /**
  * Error types for Smart Input operations
@@ -597,9 +598,6 @@ const filterSuggestionsInternal = (
 	variables: Record<string, string>,
 	searchQuery: string
 ): SuggestionItem[] => {
-	// Import Fuse.js dynamically to avoid circular dependencies
-	const Fuse = require("fuse.js")
-
 	// Convert variables object to array of suggestion items
 	const suggestions: SuggestionItem[] = Object.entries(variables).map(([key, value]) => ({
 		key,
@@ -636,7 +634,7 @@ const filterSuggestionsInternal = (
 	const results = fuse.search(searchQuery)
 
 	// Enhanced ranking: prioritize exact prefix matches
-	const rankedResults = results.map((result: any) => {
+	const rankedResults = results.map((result: FuseResult<SuggestionItem>) => {
 		const item = result.item
 		const score = result.score || 0
 

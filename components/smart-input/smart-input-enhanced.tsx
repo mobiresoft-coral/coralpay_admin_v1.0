@@ -71,7 +71,7 @@ export const SmartInputEnhanced = forwardRef<
 
 		// Safe execution wrapper
 		const safeExecute = useCallback(
-			<T>(operation: () => T, fallbackValue: T, context?: string): T => {
+			function <T>(operation: () => T, fallbackValue: T, context?: string): T {
 				try {
 					return operation()
 				} catch (error) {

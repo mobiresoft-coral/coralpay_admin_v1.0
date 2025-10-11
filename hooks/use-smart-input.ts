@@ -157,7 +157,7 @@ export const useSmartInput = ({
 	const [canRedo, setCanRedo] = useState(false)
 
 	// Text parsing hook with error handling
-	const textParser = useTextParser(value, variables, { errorConfig })
+	const textParser = useTextParser(value, variables)
 
 	// Cursor position change handler for suggestion trigger
 	const handleCursorPositionChange = useCallback((position: number) => {

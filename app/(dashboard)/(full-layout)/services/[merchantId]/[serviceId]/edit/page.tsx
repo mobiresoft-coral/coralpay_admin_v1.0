@@ -8,11 +8,12 @@ import { MenuBuilderStoreProvider } from "@/components/menu-builder/store-provid
 import { ToolsPanel } from "@/components/menu-builder/tools-panel"
 import { MenuBuilderWorkspace } from "@/components/menu-builder/workspace"
 import { EmulatorPanel } from "@/components/simulator/panel"
-import SmartInputTest from "@/components/smart-input/smart-input-test"
 import "@xyflow/react/dist/style.css"
+import { useParams } from "next/navigation"
 
 const EditServicePage = () => {
-	return <SmartInputTest />
+	const { merchantId, serviceId } = useParams()
+  
 	return (
 		<ErrorBoundary>
 			<MenuBuilderStoreProvider

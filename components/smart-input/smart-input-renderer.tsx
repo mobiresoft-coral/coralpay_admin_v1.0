@@ -84,6 +84,7 @@ export const SmartInputRenderer: React.FC<SmartInputRendererProps> = ({
 				"text-base md:text-sm", // Match input font size exactly
 				"h-9 flex items-center", // Match input height and vertical alignment
 				"overflow-hidden box-border", // Ensure consistent box model
+				"font-mono", // Use monospace font for consistent character widths
 				className
 			)}
 			aria-hidden="true" // Hide from screen readers as this is visual only
