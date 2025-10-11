@@ -19,6 +19,8 @@ import { SmartInputBase } from "./smart-input-base"
 import { SmartInputRenderer } from "./smart-input-renderer"
 import { EnvironmentSuggestions } from "./environment-suggestions"
 
+const DEFAULT_VARIABLES = {}
+
 /**
  * SmartInput component with environment variable suggestions and visual formatting
  *
@@ -35,7 +37,7 @@ export const SmartInput = forwardRef<HTMLInputElement, SmartInputProps>(
 		{
 			value,
 			onChange,
-			variables = {},
+			variables = DEFAULT_VARIABLES,
 			placeholder,
 			disabled = false,
 			className,
